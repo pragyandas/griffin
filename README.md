@@ -1,3 +1,3 @@
 # griffin
 
-charting library
+charting d3  library
