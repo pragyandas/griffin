@@ -3,7 +3,7 @@ module griffin{
 	interface IThemeDetails{
 		palatte:string[]
 	}
-	class theme{
+	export class theme{
 		public static BLACK:IThemeDetails={
 		  palatte:['A','B','C']
 		};

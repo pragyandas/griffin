@@ -1,6 +1,3 @@
-/// <reference path="../interface/IChartOptions.ts" />
-/// <reference path="../interface/IChartData.ts" />
-/// <reference path="../interface/IChartMargin.ts" />
 module griffin{
     	export class BaseChart{	
 		constructor(public containerId : string){
