@@ -2,11 +2,11 @@
 	"compilerOptions": {
 		"target": "ES5",
 		"module": "commonjs",
-		"sourceMap": true,
+		"sourceMap": false,
 		"noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-		"out":"./dist/griffin.js"
+		"outDir":"./dist/griffin.js"
 	},
 	"files": [
 		"./lib/class/baseChart.ts",
@@ -22,6 +22,8 @@
 		"./lib/interface/IChartOptions.ts",
 		"./lib/interface/IChartData.ts",
 		"./lib/interface/IChartMargin.ts",
-		"./lib/theme.ts"
+		"./lib/theme.ts",
+		"./typings/d3/d3.d.ts"
+		
 	]
 }
