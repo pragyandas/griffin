@@ -1,8 +1,2 @@
-var chart=new griffin.BaseChart('chart1');
-chart.setOptions({title: {
-                    text:'Chart'
-                },
-                legend: {
-                    visible:true
-                }});
-chart.render();
+var chart=new griffin.groupedColumn('chart1',griffin.theme.BLACK);
+chart.setOptions({title:{text:"griffin-chart"}});

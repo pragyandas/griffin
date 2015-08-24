@@ -1,5 +1,5 @@
 module griffin{
-	class groupedColumn extends BaseChart{
+	export class GroupedColumn extends BaseChart{
 		constructor(containerId:string,theme?:IThemeDetails){
 			super(containerId,theme);
 		}

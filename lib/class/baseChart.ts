@@ -1,5 +1,5 @@
 module griffin {
-	export class baseChart {
+	export class BaseChart {
 		constructor(public containerId: string, public theme: IThemeDetails=griffin.theme.DEFAULT) {
 			this.chartWidth = document.getElementById(containerId).offsetWidth;
 			this.chartHeight = document.getElementById(containerId).offsetHeight;
@@ -27,10 +27,11 @@ module griffin {
 			var svg = d3.select("#" + this.containerId).append("svg")
 				.attr("width", width + this.margin.left + this.margin.right)
 				.attr("height", height + this.margin.top + this.margin.bottom)
-				.style('fill',this.theme.backgroundColor)
+				.style('background-color',this.theme.backgroundColor)
 				.append("g")
 				.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
 				.attr("id", this.containerId + "_svg");
+			
 		}
 
 		public setOptions(chartOptions: IChartOptions) {
