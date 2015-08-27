@@ -8,22 +8,22 @@
         "preserveConstEnums": true,
 		"out":"./dist/griffin.js"
 	},
-	"files": [
-		"./lib/class/baseChart.ts",
-		"./lib/class/stackedColumn.ts",
-		"./lib/class/groupedColumn.ts",
-		"./lib/class/stackedBar.ts",
-		"./lib/class/groupedBar.ts",
-		"./lib/class/pie.ts",
-		"./lib/class/donut.ts",
-		"./lib/class/line.ts",
-		"./lib/class/area.ts",
-		"./lib/class/barTable.ts",
-		"./lib/interface/IChartOptions.ts",
-		"./lib/interface/IChartData.ts",
-		"./lib/interface/IChartMargin.ts",
-		"./lib/theme.ts",
-		"./typings/d3/d3.d.ts",
-		"./typings/tsd.d.ts"
-	]
+	"formatCodeOptions": {
+        "indentSize": 4,
+        "tabSize": 4,
+        "newLineCharacter": "\r\n",
+        "convertTabsToSpaces": true,
+        "insertSpaceAfterCommaDelimiter": true,
+        "insertSpaceAfterSemicolonInForStatements": true,
+        "insertSpaceBeforeAndAfterBinaryOperators": true,
+        "insertSpaceAfterKeywordsInControlFlowStatements": true,
+        "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+        "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+        "placeOpenBraceOnNewLineForFunctions": false,
+        "placeOpenBraceOnNewLineForControlBlocks": false
+    },
+	"filesGlob": [
+        "./lib/**/*.ts",
+		"./typings/**/*.ts"
+    ]
 }

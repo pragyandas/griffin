@@ -5,6 +5,10 @@ module griffin{
 		}
 		public render(chartData : IChartData){
 			super.render(chartData);
+			
+			//axis 
+			//legend
+			
 		}
 		
 		public setOptions(chartOptions : IChartOptions){

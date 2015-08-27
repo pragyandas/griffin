@@ -16,17 +16,18 @@ module griffin {
 		public color: string[];
 		public height: number;
 		public width: number;
+		public svg:d3.Selection<any>;
 
 		public render(chartData: IChartData) {
 
 			this.color = this.theme.palette;
 
-			var width = this.chartWidth - this.margin.left - this.margin.right,
-				height = this.chartHeight - this.margin.top - this.margin.bottom;
+			this.width = this.chartWidth - this.margin.left - this.margin.right;
+			this.height = this.chartHeight - this.margin.top - this.margin.bottom;
 
-			var svg = d3.select("#" + this.containerId).append("svg")
-				.attr("width", width + this.margin.left + this.margin.right)
-				.attr("height", height + this.margin.top + this.margin.bottom)
+			this.svg = d3.select("#" + this.containerId).append("svg")
+				.attr("width",this.width + this.margin.left + this.margin.right)
+				.attr("height",this.height + this.margin.top + this.margin.bottom)
 				.style('background-color',this.theme.backgroundColor)
 				.append("g")
 				.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
