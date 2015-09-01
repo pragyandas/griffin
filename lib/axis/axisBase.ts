@@ -4,7 +4,8 @@ module griffin{
 		}
 		public axisOptions:IAxisOptions;
 		public setOptions(axisOptions:IAxisOptions){
-			this.axisOptions=axisOptions;
+			if (typeof axisOptions.axisColor !== 'undefined' && axisOptions.axisColor !== null)
+				this.axisOptions.axisColor=axisOptions.axisColor;
 		}
 	}
 }

@@ -1,4 +1,6 @@
 module griffin {
+	//Change enums to static class
+	/*IMPORTANT*/
 	export enum axisType {
 		linear,
 		percentage,
@@ -20,7 +22,6 @@ module griffin {
 		direction?: direction,
 		orient?: direction,
 		ticks?: number,
-		tickSize?: number,
 		scale?: any,
 		fontSize?: number,
 		fontFamily?: string,
@@ -28,13 +29,13 @@ module griffin {
 		showGridlines?: boolean,
 		tickFormat?: any,
 		position?: { x: number, y: number },
-		clamp: boolean,
-		axisColor: string,
-		labelRotate: rotation,
-		pathVisible: boolean,
-		aec: number,//axis-extrapolation-coefficient
-		tickColor: string,
-		_max: number,
-		_min: number
+		clamp?: boolean,
+		axisColor?: string,
+		labelRotate?: rotation,
+		pathVisible?: boolean,
+		aec?: number,//axis-extrapolation-coefficient
+		tickColor?: string,
+		_max?: number,
+		_min?: number
 	}
 }
