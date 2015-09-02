@@ -7,10 +7,10 @@ module griffin {
 		public chartWidth: number;
 		public chartHeight: number;
 		public margin: IChartMargin= {
-					top: <number>10,
-					bottom: <number>20,
-					left: <number>20,
-					right: <number>20
+					top: <number>20,
+					bottom: <number>10,
+					left: <number>30,
+					right: <number>10
 		};
 		public title:IChartTitle={
             text:"",
@@ -25,7 +25,7 @@ module griffin {
 		public height: number;
 		public width: number;
 		public svg: d3.Selection<any>;
-		public theme: IThemeDetails=theme.DEFAULT;
+		public theme: IChartThemeDetails=theme.DEFAULT;
 
 		public render(chartData: IChartData) {
 
@@ -44,15 +44,16 @@ module griffin {
 		}
 
 		public setOptions(chartOptions: IChartOptions) {
-			
-			//Check for sub-options and assign them
-			/* IMPORTANT */
-			if (typeof chartOptions.title !== 'undefined' && chartOptions.title !== null)
-                this.title = chartOptions.title;
-			if (typeof chartOptions.tooltip !== 'undefined' && chartOptions.tooltip !== null)
-				this.tooltip = chartOptions.tooltip;
 			if (typeof chartOptions.theme !== 'undefined' && chartOptions.theme !== null)
 				this.theme = chartOptions.theme;
+			if (typeof chartOptions.title.text !== 'undefined' && chartOptions.title.text !== null)
+                this.title.text = chartOptions.title.text;
+			if (typeof chartOptions.title.font !== 'undefined' && chartOptions.title.font !== null)
+                this.title.font = chartOptions.title.font;
+			if (typeof chartOptions.title.fontSize !== 'undefined' && chartOptions.title.fontSize !== null)
+                this.title.fontSize = chartOptions.title.fontSize;
+			if (typeof chartOptions.tooltip !== 'undefined' && chartOptions.tooltip !== null)
+				this.tooltip = chartOptions.tooltip;		
 			if (typeof chartOptions.margin !== 'undefined' && chartOptions.margin !== null)
 				this.margin = chartOptions.margin;
 		}

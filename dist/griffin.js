@@ -50,10 +50,10 @@ var griffin;
         function BaseChart(containerId) {
             this.containerId = containerId;
             this.margin = {
-                top: 10,
-                bottom: 20,
-                left: 20,
-                right: 20
+                top: 20,
+                bottom: 10,
+                left: 30,
+                right: 10
             };
             this.title = {
                 text: "",
@@ -81,12 +81,16 @@ var griffin;
                 .attr("id", this.containerId + "_svg");
         };
         BaseChart.prototype.setOptions = function (chartOptions) {
-            if (typeof chartOptions.title !== 'undefined' && chartOptions.title !== null)
-                this.title = chartOptions.title;
-            if (typeof chartOptions.tooltip !== 'undefined' && chartOptions.tooltip !== null)
-                this.tooltip = chartOptions.tooltip;
             if (typeof chartOptions.theme !== 'undefined' && chartOptions.theme !== null)
                 this.theme = chartOptions.theme;
+            if (typeof chartOptions.title.text !== 'undefined' && chartOptions.title.text !== null)
+                this.title.text = chartOptions.title.text;
+            if (typeof chartOptions.title.font !== 'undefined' && chartOptions.title.font !== null)
+                this.title.font = chartOptions.title.font;
+            if (typeof chartOptions.title.fontSize !== 'undefined' && chartOptions.title.fontSize !== null)
+                this.title.fontSize = chartOptions.title.fontSize;
+            if (typeof chartOptions.tooltip !== 'undefined' && chartOptions.tooltip !== null)
+                this.tooltip = chartOptions.tooltip;
             if (typeof chartOptions.margin !== 'undefined' && chartOptions.margin !== null)
                 this.margin = chartOptions.margin;
         };
@@ -127,21 +131,20 @@ var griffin;
             axisColor: '#fff',
             backgroundColor: '#000',
             axisFont: 'sans-serif',
-            axisFontSize: 12
+            axisFontSize: 12,
+            tooltipTheme: tooltipTheme.CANDY
         };
         theme.DEFAULT = {
             palette: ['#03A9F4', '#E91E63', '#ff9800', '#4CAF50', '#D4E157', '#FFA726', '#9C27B0', '#DD4477', '#66AA00', '#B82E2E'],
             axisColor: '#000',
             backgroundColor: '#fff',
             axisFont: 'sans-serif',
-            axisFontSize: 12
+            axisFontSize: 12,
+            tooltipTheme: tooltipTheme.BASIC
         };
         return theme;
     })();
     griffin.theme = theme;
-})(griffin || (griffin = {}));
-var griffin;
-(function (griffin) {
     var tooltipTheme = (function () {
         function tooltipTheme() {
         }

@@ -1,4 +1,6 @@
 module griffin {
+    //Add all the options to the themes with default values for each theme
+    //Most of the options can be same
     export interface IChartTitle{
             text:string,
 			font?:string,
@@ -6,7 +8,7 @@ module griffin {
 	}
     export interface ITooltip{
             visible: boolean,
-            tooltipTheme?:ITooltipDetails
+            tooltipTheme?:ITooltipThemeDetails
     }
     export interface ILegend{
             visible: boolean,
@@ -25,6 +27,6 @@ module griffin {
         categoryAxisOptions?:IAxisOptions,
         tooltip?:ITooltip,
         margin?:IChartMargin,
-        theme?:IThemeDetails    
+        theme?:IChartThemeDetails    
     }
 }
