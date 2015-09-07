@@ -4,7 +4,8 @@ module griffin{
 		shadow: boolean,
 		tooltipFont?: string,
 		tooltipFontSize?: number
-		//add more options
+		//dummy options
+		//add actual values
 	}
 	export interface IChartThemeDetails{
 		palette:string[]
