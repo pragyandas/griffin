@@ -15,13 +15,7 @@ module griffin.chart {
 		}
 		public categoryAxis: any;
 		public seriesAxes: [any];
-		public legend:any;
-		public categoryAxisOptions: axis.IAxisOptions = {
-			//fill required options
-		};
-		public valueAxisOptions: axis.IAxisOptions = {
-			//fill required options
-		}
+		public legend: any;
 		public render(data: IChartData) {
 			let margin = this.margin;
 			this.setMarginForAxis(data,margin);

@@ -2,6 +2,7 @@ module griffin.axis{
 	export enum AxisType {
 		linear,
 		percentage,
+		log,
 		time,
 		date,
 		ordinal,
@@ -19,7 +20,10 @@ module griffin.axis{
 		scale?: any,
 		fontSize?: number,
 		fontFamily?: string,
-		title?: string,
+		title?: {
+			visible: boolean,
+			text?: string
+		},
 		showGridlines?: boolean,
 		innerPadding?:number,
 		outerPadding?:number,
@@ -45,6 +49,10 @@ module griffin.axis{
 				break;
 			case AxisType.percentage:
 				return new percentageAxis();
+				break;
+
+			case AxisType.log:
+				return new logAxis();
 				break;
 			case AxisType.time:
 				return new timeAxis();

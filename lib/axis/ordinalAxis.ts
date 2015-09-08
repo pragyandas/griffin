@@ -13,7 +13,7 @@ module griffin.axis{
 			this.axisOptions.orient = axisOptions.orient && axisOptions.orient !== null ? axisOptions.orient : 'left';
 			this.axisOptions.fontSize = axisOptions.fontSize && axisOptions.fontSize !== null ? axisOptions.fontSize:12;//theme
 			this.axisOptions.fontFamily = axisOptions.fontFamily && axisOptions.fontFamily !== null ? axisOptions.fontFamily:'sans-serif';//theme
-			this.axisOptions.title = axisOptions.title && axisOptions.title !== null ? axisOptions.title :{true,""};
+			this.axisOptions.title = axisOptions.title && axisOptions.title !== null ? axisOptions.title :{visible:true,text:""};
 			this.axisOptions.showGridlines = axisOptions.showGridlines && axisOptions.showGridlines !== null ? axisOptions.showGridlines:true;
 			this.axisOptions.innerPadding = axisOptions.innerPadding && axisOptions.innerPadding !== null ? axisOptions.innerPadding:0.1;
 			this.axisOptions.outerPadding = axisOptions.outerPadding && axisOptions.outerPadding !== null ? axisOptions.outerPadding:0.2;
