@@ -5,10 +5,11 @@ var griffin;
         (function (AxisType) {
             AxisType[AxisType["linear"] = 0] = "linear";
             AxisType[AxisType["percentage"] = 1] = "percentage";
-            AxisType[AxisType["time"] = 2] = "time";
-            AxisType[AxisType["date"] = 3] = "date";
-            AxisType[AxisType["ordinal"] = 4] = "ordinal";
-            AxisType[AxisType["custom"] = 5] = "custom";
+            AxisType[AxisType["log"] = 2] = "log";
+            AxisType[AxisType["time"] = 3] = "time";
+            AxisType[AxisType["date"] = 4] = "date";
+            AxisType[AxisType["ordinal"] = 5] = "ordinal";
+            AxisType[AxisType["custom"] = 6] = "custom";
         })(axis.AxisType || (axis.AxisType = {}));
         var AxisType = axis.AxisType;
         (function (Direction) {
@@ -29,6 +30,9 @@ var griffin;
                         break;
                     case AxisType.percentage:
                         return new axis.percentageAxis();
+                        break;
+                    case AxisType.log:
+                        return new axis.logAxis();
                         break;
                     case AxisType.time:
                         return new axis.timeAxis();
@@ -123,13 +127,54 @@ var griffin;
     var axis;
     (function (axis) {
         var ordinalAxis = (function () {
-            function ordinalAxis() {
-                this.axisOptions = {};
+            function ordinalAxis(axisTheme) {
+                if (axisTheme === void 0) { axisTheme = griffin.theme.DEFAULT; }
+                this.axisTheme = axisTheme;
+                this.axisOptions = {
+                    direction: axis.Direction.horizontal,
+                    orient: 'left',
+                    fontSize: 12,
+                    fontFamily: 'sans-serif',
+                    title: { visible: true, text: "" },
+                    showGridlines: true,
+                    innerPadding: 0.1,
+                    outerPadding: 0.2,
+                    clamp: true,
+                    axisColor: '#000',
+                    labelRotate: 'auto',
+                    pathVisible: true,
+                    tickColor: '#000'
+                };
             }
             ordinalAxis.prototype.setAxisOptions = function (axisOptions) {
+                if (typeof axisOptions.direction !== 'undefined' && axisOptions.direction !== null)
+                    this.axisOptions.direction = axisOptions.direction;
+                if (typeof axisOptions.orient !== 'undefined' && axisOptions.orient !== null)
+                    this.axisOptions.orient = axisOptions.orient;
+                if (typeof axisOptions.fontSize !== 'undefined' && axisOptions.fontSize !== null)
+                    this.axisOptions.fontSize = axisOptions.fontSize;
+                if (typeof axisOptions.fontFamily !== 'undefined' && axisOptions.fontFamily !== null)
+                    this.axisOptions.fontFamily = axisOptions.fontFamily;
+                if (typeof axisOptions.title !== 'undefined' && axisOptions.title !== null)
+                    this.axisOptions.title = axisOptions.title;
+                if (typeof axisOptions.showGridlines !== 'undefined' && axisOptions.showGridlines !== null)
+                    this.axisOptions.showGridlines = axisOptions.showGridlines;
+                if (typeof axisOptions.innerPadding !== 'undefined' && axisOptions.innerPadding !== null)
+                    this.axisOptions.innerPadding = axisOptions.innerPadding;
+                if (typeof axisOptions.outerPadding !== 'undefined' && axisOptions.outerPadding !== null)
+                    this.axisOptions.outerPadding = axisOptions.outerPadding;
+                if (typeof axisOptions.clamp !== 'undefined' && axisOptions.clamp !== null)
+                    this.axisOptions.clamp = axisOptions.clamp;
+                if (typeof axisOptions.axisColor !== 'undefined' && axisOptions.axisColor !== null)
+                    this.axisOptions.axisColor = axisOptions.axisColor;
+                if (typeof axisOptions.labelRotate !== 'undefined' && axisOptions.labelRotate !== null)
+                    this.axisOptions.labelRotate = axisOptions.labelRotate;
+                if (typeof axisOptions.pathVisible !== 'undefined' && axisOptions.pathVisible !== null)
+                    this.axisOptions.pathVisible = axisOptions.pathVisible;
+                if (typeof axisOptions.tickColor !== 'undefined' && axisOptions.tickColor !== null)
+                    this.axisOptions.tickColor = axisOptions.tickColor;
             };
             ordinalAxis.prototype.draw = function (svg, axisData) {
-                this.axisData = axisData;
             };
             return ordinalAxis;
         })();
@@ -243,8 +288,6 @@ var griffin;
                 this.columnOptions = {
                     isStacked: chart.Stacked.false
                 };
-                this.categoryAxisOptions = {};
-                this.valueAxisOptions = {};
             }
             Column.prototype.render = function (data) {
                 var margin = this.margin;

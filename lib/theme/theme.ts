@@ -1,6 +1,6 @@
 module griffin{
 	export class theme{
-		public static BLACK:IChartThemeDetails={
+		public static BLACK:IThemeDetails={
 		  palette:['#03A9F4', '#E91E63', '#ff9800', '#4CAF50', '#D4E157', '#FFA726', '#9C27B0', '#DD4477', '#66AA00', '#B82E2E'],
 		  axisColor:'#fff',
 		  backgroundColor:'#000',
@@ -8,7 +8,7 @@ module griffin{
 		  axisFontSize:12,
 		  tooltipTheme:tooltipTheme.CANDY
 		};
-		public static DEFAULT:IChartThemeDetails={
+		public static DEFAULT:IThemeDetails={
 		  palette:['#03A9F4', '#E91E63', '#ff9800', '#4CAF50', '#D4E157', '#FFA726', '#9C27B0', '#DD4477', '#66AA00', '#B82E2E'],
 		  axisColor:'#000',
 		  backgroundColor:'#fff',
@@ -17,6 +17,8 @@ module griffin{
 		  tooltipTheme:tooltipTheme.BASIC
 		};
 	}
+
+	//create classes for axisTheme and LegendTheme
 	export class tooltipTheme {
 		public static BASIC: ITooltipThemeDetails = {
 			roundedEdge:false,

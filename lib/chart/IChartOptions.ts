@@ -17,7 +17,7 @@ module griffin.chart {
 		relative
 	}
     export interface IChartOptions {
-        theme?:IChartThemeDetails,    
+        theme?:IThemeDetails,    
         valueAxesOptions?:[axis.IAxisOptions],
         categoryAxisOptions?:axis.IAxisOptions,
         tooltip?:boolean,

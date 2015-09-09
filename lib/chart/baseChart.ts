@@ -19,7 +19,7 @@ module griffin.chart {
 		public height: number;
 		public width: number;
 		public svg: d3.Selection<any>;
-		public theme: IChartThemeDetails = theme.DEFAULT;
+		public theme: IThemeDetails = theme.DEFAULT;
 
 		public render(chartData: IChartData) {
 

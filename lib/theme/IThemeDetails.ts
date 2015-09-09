@@ -7,7 +7,7 @@ module griffin{
 		//dummy options
 		//add actual values
 	}
-	export interface IChartThemeDetails{
+	export interface IThemeDetails{
 		palette:string[]
 		axisColor:string,
 		backgroundColor:string,
