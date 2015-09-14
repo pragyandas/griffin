@@ -17,37 +17,23 @@ var griffin;
             Direction[Direction["horizontal"] = 1] = "horizontal";
         })(axis.Direction || (axis.Direction = {}));
         var Direction = axis.Direction;
-        var Axis = (function () {
-            function Axis() {
+        var AxisFactory = (function () {
+            function AxisFactory() {
             }
-            Axis.getAxis = function (axisType) {
-                switch (axisType) {
+            AxisFactory.getAxis = function (axisOptions, axisTheme) {
+                if (axisTheme === void 0) { axisTheme = griffin.theme.DEFAULT; }
+                switch (axisOptions.axisType) {
                     case AxisType.ordinal:
-                        return new axis.ordinalAxis();
+                        return new axis.ordinalAxis(axisOptions, axisTheme);
                         break;
                     case AxisType.linear:
-                        return new axis.linearAxis();
-                        break;
-                    case AxisType.percentage:
-                        return new axis.percentageAxis();
-                        break;
-                    case AxisType.log:
-                        return new axis.logAxis();
-                        break;
-                    case AxisType.time:
-                        return new axis.timeAxis();
-                        break;
-                    case AxisType.date:
-                        return new axis.dateAxis();
-                        break;
-                    default:
-                        return new axis.customAxis();
+                        return new axis.linearAxis(axisOptions, axisTheme);
                         break;
                 }
             };
-            return Axis;
+            return AxisFactory;
         })();
-        axis.Axis = Axis;
+        axis.AxisFactory = AxisFactory;
     })(axis = griffin.axis || (griffin.axis = {}));
 })(griffin || (griffin = {}));
 var griffin;
@@ -91,11 +77,59 @@ var griffin;
     var axis;
     (function (axis) {
         var linearAxis = (function () {
-            function linearAxis() {
-                this.axisOptions = {};
+            function linearAxis(axisOptions, axisTheme) {
+                this.axisTheme = axisTheme;
+                this.axisOptions = {
+                    direction: axis.Direction.vertical,
+                    orient: 'left',
+                    ticks: 5,
+                    fontSize: 12,
+                    fontFamily: 'sans-serif',
+                    title: {
+                        visible: true,
+                        text: ""
+                    },
+                    showGridlines: true,
+                    tickFormat: '',
+                    position: {
+                        x: 0,
+                        y: 0
+                    },
+                    clamp: true,
+                    axisColor: '#000',
+                    pathVisible: true,
+                    aec: 0.1,
+                    tickColor: '#000',
+                };
+                if (typeof axisOptions.direction !== 'undefined' && axisOptions.direction !== null)
+                    this.axisOptions.direction = axisOptions.direction;
+                if (typeof axisOptions.orient !== 'undefined' && axisOptions.orient !== null)
+                    this.axisOptions.orient = axisOptions.orient;
+                if (typeof axisOptions.ticks !== 'undefined' && axisOptions.ticks !== null)
+                    this.axisOptions.ticks = axisOptions.ticks;
+                if (typeof axisOptions.fontSize !== 'undefined' && axisOptions.fontSize !== null)
+                    this.axisOptions.fontSize = axisOptions.fontSize;
+                if (typeof axisOptions.fontFamily !== 'undefined' && axisOptions.fontFamily !== null)
+                    this.axisOptions.fontFamily = axisOptions.fontFamily;
+                if (typeof axisOptions.title !== 'undefined' && axisOptions.title !== null)
+                    this.axisOptions.title = axisOptions.title;
+                if (typeof axisOptions.showGridlines !== 'undefined' && axisOptions.showGridlines !== null)
+                    this.axisOptions.showGridlines = axisOptions.showGridlines;
+                if (typeof axisOptions.tickFormat !== 'undefined' && axisOptions.tickFormat !== null)
+                    this.axisOptions.tickFormat = axisOptions.tickFormat;
+                if (typeof axisOptions.position !== 'undefined' && axisOptions.position !== null)
+                    this.axisOptions.position = axisOptions.position;
+                if (typeof axisOptions.clamp !== 'undefined' && axisOptions.clamp !== null)
+                    this.axisOptions.clamp = axisOptions.clamp;
+                if (typeof axisOptions.axisColor !== 'undefined' && axisOptions.axisColor !== null)
+                    this.axisOptions.axisColor = axisOptions.axisColor;
+                if (typeof axisOptions.pathVisible !== 'undefined' && axisOptions.pathVisible !== null)
+                    this.axisOptions.pathVisible = axisOptions.pathVisible;
+                if (typeof axisOptions.aec !== 'undefined' && axisOptions.aec !== null)
+                    this.axisOptions.aec = axisOptions.aec;
+                if (typeof axisOptions.tickColor !== 'undefined' && axisOptions.tickColor !== null)
+                    this.axisOptions.tickColor = axisOptions.tickColor;
             }
-            linearAxis.prototype.setAxisOptions = function (axisOptions) {
-            };
             linearAxis.prototype.draw = function (svg, axisData) {
                 this.axisData = axisData;
             };
@@ -125,28 +159,29 @@ var griffin;
 var griffin;
 (function (griffin) {
     var axis;
-    (function (axis) {
+    (function (axis_1) {
         var ordinalAxis = (function () {
-            function ordinalAxis(axisTheme) {
-                if (axisTheme === void 0) { axisTheme = griffin.theme.DEFAULT; }
+            function ordinalAxis(axisOptions, axisTheme) {
                 this.axisTheme = axisTheme;
                 this.axisOptions = {
-                    direction: axis.Direction.horizontal,
-                    orient: 'left',
+                    direction: axis_1.Direction.horizontal,
+                    orient: 'bottom',
                     fontSize: 12,
                     fontFamily: 'sans-serif',
                     title: { visible: true, text: "" },
                     showGridlines: true,
                     innerPadding: 0.1,
                     outerPadding: 0.2,
+                    position: {
+                        x: 0,
+                        y: 0
+                    },
                     clamp: true,
                     axisColor: '#000',
                     labelRotate: 'auto',
                     pathVisible: true,
                     tickColor: '#000'
                 };
-            }
-            ordinalAxis.prototype.setAxisOptions = function (axisOptions) {
                 if (typeof axisOptions.direction !== 'undefined' && axisOptions.direction !== null)
                     this.axisOptions.direction = axisOptions.direction;
                 if (typeof axisOptions.orient !== 'undefined' && axisOptions.orient !== null)
@@ -173,12 +208,37 @@ var griffin;
                     this.axisOptions.pathVisible = axisOptions.pathVisible;
                 if (typeof axisOptions.tickColor !== 'undefined' && axisOptions.tickColor !== null)
                     this.axisOptions.tickColor = axisOptions.tickColor;
-            };
-            ordinalAxis.prototype.draw = function (svg, axisData) {
+                if (typeof axisOptions.position !== 'undefined' && axisOptions.position !== null)
+                    this.axisOptions.position = axisOptions.position;
+            }
+            ordinalAxis.prototype.draw = function (svg, axisData, axisId) {
+                switch (this.axisOptions.direction) {
+                    case (axis_1.Direction.horizontal):
+                        var axisId = axisId || svg.attr('id') + '_xAxis';
+                        var width = parseFloat(svg.attr('width'));
+                        this.scale = d3.scale.ordinal()
+                            .domain(axisData.map(function (d) { return d.value; }))
+                            .rangeRoundBands([0, width], this.axisOptions.innerPadding, this.axisOptions.outerPadding);
+                        var xAxis = d3.svg.axis()
+                            .scale(this.scale)
+                            .orient(this.axisOptions.orient);
+                        var axis = svg.append('g')
+                            .attr('class', 'x axis')
+                            .attr('id', axisId)
+                            .call(xAxis)
+                            .attr("transform", "translate(" + this.axisOptions.position.x + "," + this.axisOptions.position.y + ")");
+                        axis.selectAll('text')
+                            .text(function (d) {
+                            return d.name;
+                        });
+                        break;
+                    case (axis_1.Direction.vertical):
+                        break;
+                }
             };
             return ordinalAxis;
         })();
-        axis.ordinalAxis = ordinalAxis;
+        axis_1.ordinalAxis = ordinalAxis;
     })(axis = griffin.axis || (griffin.axis = {}));
 })(griffin || (griffin = {}));
 var griffin;
@@ -311,21 +371,21 @@ var griffin;
                 var margin = this.margin;
                 var valueAxisCount = d3.max(data.series.map(function (d) { return d.axisId || 0; })) + 1;
                 var categoryOptions = this.chartOptions.categoryAxisOptions;
-                this.categoryAxis = griffin.axis.Axis.getAxis(categoryOptions.axisType || griffin.axis.AxisType.ordinal);
+                categoryOptions.axisType = categoryOptions.axisType || griffin.axis.AxisType.ordinal;
                 categoryOptions.position = categoryOptions.position && categoryOptions.position !== null ? categoryOptions.position : { x: 0, y: this.height };
                 categoryOptions.direction = categoryOptions.direction && categoryOptions.direction !== null ? categoryOptions.direction : griffin.axis.Direction.horizontal;
-                this.categoryAxis.setAxisOptions(this.chartOptions.categoryAxisOptions);
+                this.categoryAxis = griffin.axis.AxisFactory.getAxis(categoryOptions, this.theme);
                 this.categoryAxis.draw(this.svg, data.categories);
                 for (var i = 0; i < valueAxisCount; i++) {
                     if (i === 0) {
                         var axisData = data.series.filter(function (d) {
                             return typeof d.axisId === 'undefined' || d.axisId === i;
                         }), seriesAxisOption = this.chartOptions.valueAxesOptions[i];
+                        seriesAxisOption.axisType = seriesAxisOption.axisType || griffin.axis.AxisType.linear;
                         seriesAxisOption.position = seriesAxisOption.position && seriesAxisOption.position !== null ? seriesAxisOption.position : { x: 0, y: 0 };
                         seriesAxisOption.direction = seriesAxisOption.direction && seriesAxisOption.direction !== null ? seriesAxisOption.direction : griffin.axis.Direction.vertical;
                         seriesAxisOption.orient = seriesAxisOption.orient && seriesAxisOption.orient !== null ? seriesAxisOption.orient : 'left';
-                        var seriesAxis = griffin.axis.Axis.getAxis(seriesAxisOption.axisType || griffin.axis.AxisType.linear);
-                        seriesAxis.setAxisOptions(seriesAxisOption);
+                        var seriesAxis = griffin.axis.AxisFactory.getAxis(seriesAxisOption, this.theme);
                         seriesAxis.draw(this.svg, axisData);
                         this.seriesAxes.push(seriesAxis);
                     }
@@ -333,19 +393,31 @@ var griffin;
                         var axisData = data.series.filter(function (d) {
                             return d.axisId === i;
                         }), seriesAxisOption = this.chartOptions.valueAxesOptions[i];
+                        seriesAxisOption.axisType = seriesAxisOption.axisType || griffin.axis.AxisType.linear;
                         seriesAxisOption.position = seriesAxisOption.position && seriesAxisOption.position !== null ? seriesAxisOption.position : (i % 2 === 0 ? { x: (0 - margin.left + i * 30), y: 0 } : { x: (this.width + ((i - 1) * 20)), y: 0 });
                         seriesAxisOption.orient = seriesAxisOption.orient && seriesAxisOption.orient !== null ? seriesAxisOption.orient : (i % 2 === 0 ? 'left' : 'right');
                         seriesAxisOption.direction = seriesAxisOption.direction && seriesAxisOption.direction !== null ? seriesAxisOption.direction : griffin.axis.Direction.vertical;
-                        var seriesAxis = griffin.axis.Axis.getAxis(seriesAxisOption.axisType || griffin.axis.AxisType.linear);
-                        seriesAxis.setAxisOptions(seriesAxisOption);
+                        var seriesAxis = griffin.axis.AxisFactory.getAxis(seriesAxisOption, this.theme);
                         seriesAxis.draw(this.svg, axisData);
                         this.seriesAxes.push(seriesAxis);
                     }
                 }
             };
             Column.prototype.renderStackedColumn = function (data) {
+                if (data.series.filter(function (d) {
+                    return (d.trendline || d.trendline === false) && d.axisId > 1;
+                }).length > 0) {
+                    console.error("multiple axis can only be used with trendline when 'isStacked=true'");
+                    return;
+                }
             };
             Column.prototype.renderNormalizedStackedColumn = function (data) {
+                if (data.series.filter(function (d) {
+                    return (d.trendline || d.trendline === false) && d.axisId > 1;
+                }).length > 0) {
+                    console.error("multiple axis can only be used with trendline when 'isStacked=relative'");
+                    return;
+                }
             };
             Column.prototype.setMarginForAxis = function (data, margin) {
                 var _this = this;

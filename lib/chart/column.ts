@@ -40,10 +40,10 @@ module griffin.chart {
 			let valueAxisCount=d3.max(data.series.map((d)=>{return d.axisId||0}))+1;
 			
 			let categoryOptions=this.chartOptions.categoryAxisOptions;
-			this.categoryAxis=axis.Axis.getAxis(categoryOptions.axisType|| axis.AxisType.ordinal);
+			categoryOptions.axisType=categoryOptions.axisType || axis.AxisType.ordinal;
 			categoryOptions.position=categoryOptions.position && categoryOptions.position!==null?categoryOptions.position:{x:0,y:this.height};
 			categoryOptions.direction=categoryOptions.direction && categoryOptions.direction!==null?categoryOptions.direction:axis.Direction.horizontal;
-			this.categoryAxis.setAxisOptions(this.chartOptions.categoryAxisOptions);
+			this.categoryAxis=axis.AxisFactory.getAxis(categoryOptions,this.theme);
 			this.categoryAxis.draw(this.svg,data.categories);
 			
 			for(var i=0;i<valueAxisCount;i++){
@@ -52,11 +52,11 @@ module griffin.chart {
 						return typeof d.axisId==='undefined' || d.axisId===i
 					}),
 					seriesAxisOption=this.chartOptions.valueAxesOptions[i];
+					seriesAxisOption.axisType=seriesAxisOption.axisType || axis.AxisType.linear;
 					seriesAxisOption.position=seriesAxisOption.position && seriesAxisOption.position!==null?seriesAxisOption.position:{x:0,y:0};
 					seriesAxisOption.direction=seriesAxisOption.direction && seriesAxisOption.direction!==null?seriesAxisOption.direction:axis.Direction.vertical;
 					seriesAxisOption.orient=seriesAxisOption.orient && seriesAxisOption.orient!==null?seriesAxisOption.orient:'left';
-					let seriesAxis=axis.Axis.getAxis(seriesAxisOption.axisType || axis.AxisType.linear);
-					seriesAxis.setAxisOptions(seriesAxisOption);
+					let seriesAxis=axis.AxisFactory.getAxis(seriesAxisOption,this.theme);
 					seriesAxis.draw(this.svg,axisData);
 					this.seriesAxes.push(seriesAxis);
 				}
@@ -65,11 +65,11 @@ module griffin.chart {
 						return d.axisId===i
 					}),
 					seriesAxisOption=this.chartOptions.valueAxesOptions[i];
+					seriesAxisOption.axisType=seriesAxisOption.axisType || axis.AxisType.linear;
 					seriesAxisOption.position=seriesAxisOption.position && seriesAxisOption.position!==null?seriesAxisOption.position:(i%2===0?{x:(0 - margin.left + i * 30),y:0}:{x:(this.width + ((i - 1) * 20)),y:0});
 					seriesAxisOption.orient=seriesAxisOption.orient && seriesAxisOption.orient!==null?seriesAxisOption.orient:(i%2===0?'left':'right');
 					seriesAxisOption.direction=seriesAxisOption.direction && seriesAxisOption.direction!==null?seriesAxisOption.direction:axis.Direction.vertical;
-					let seriesAxis=axis.Axis.getAxis(seriesAxisOption.axisType || axis.AxisType.linear);
-					seriesAxis.setAxisOptions(seriesAxisOption);
+					let seriesAxis=axis.AxisFactory.getAxis(seriesAxisOption,this.theme);
 					seriesAxis.draw(this.svg,axisData);
 					this.seriesAxes.push(seriesAxis);
 				}
@@ -78,13 +78,30 @@ module griffin.chart {
 		
 		private renderStackedColumn(data:IChartData){
 			//multiple axis can only be used for trendline
+			if(data.series.filter((d)=>{
+				return (d.trendline || d.trendline===false) && d.axisId>1;
+			}).length>0)
+			{
+				console.error("multiple axis can only be used with trendline when 'isStacked=true'");
+				return;
+			}
+			
+			
 		}
 		
 		private renderNormalizedStackedColumn(data:IChartData){
 			//multiple axis can only be used for trendline
+			if(data.series.filter((d)=>{
+				return (d.trendline || d.trendline===false) && d.axisId>1;
+			}).length>0)
+			{
+				console.error("multiple axis can only be used with trendline when 'isStacked=relative'");
+				return;
+			}
 		}
 		
 		private setMarginForAxis(data:IChartData,margin:IChartMargin){
+			//Set margin after axis position
 			let valueAxisCount = 1;
 			data.series.forEach((d, i) => {
 				if (d.axisId && d.axisId > valueAxisCount) {

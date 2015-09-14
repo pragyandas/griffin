@@ -1,4 +1,4 @@
-module griffin.axis{
+module griffin.axis {
 	export enum AxisType {
 		linear,
 		percentage,
@@ -8,13 +8,13 @@ module griffin.axis{
 		ordinal,
 		custom
 	}
-	export enum Direction{
+	export enum Direction {
 		vertical,
 		horizontal
 	}
 	export interface IAxisOptions {
 		axisType?: AxisType,
-		direction?:Direction,
+		direction?: Direction,
 		orient?: string,
 		ticks?: number,
 		scale?: any,
@@ -25,44 +25,43 @@ module griffin.axis{
 			text?: string
 		},
 		showGridlines?: boolean,
-		innerPadding?:number,
-		outerPadding?:number,
+		innerPadding?: number,
+		outerPadding?: number,
 		tickFormat?: any,
 		position?: { x: number, y: number },
 		clamp?: boolean,
 		axisColor?: string,
-		labelRotate?:string,//if auto then
+		labelRotate?: string,//if auto then
 		pathVisible?: boolean,
 		aec?: number,//axis-extrapolation-coefficient
 		tickColor?: string,
 		_max?: number,
 		_min?: number
 	}
-	export class Axis{
-		public static getAxis(axisType:AxisType){
-			switch (axisType) {
-			case AxisType.ordinal:
-				return new ordinalAxis();		
-				break;
-			case AxisType.linear:
-				return new linearAxis();
-				break;
-			case AxisType.percentage:
-				return new percentageAxis();
-				break;
-
-			case AxisType.log:
-				return new logAxis();
-				break;
-			case AxisType.time:
-				return new timeAxis();
-				break;
-			case AxisType.date:
-				return new dateAxis();
-				break;
-			default:
-				return new customAxis();
-				break;
+	export class AxisFactory {
+		public static getAxis(axisOptions: IAxisOptions, axisTheme: IThemeDetails = theme.DEFAULT) {
+			switch (axisOptions.axisType) {
+				case AxisType.ordinal:
+					return new ordinalAxis(axisOptions, axisTheme);
+					break;
+				case AxisType.linear:
+					return new linearAxis(axisOptions, axisTheme);
+					break;
+				// case AxisType.percentage:
+				// 	return new percentageAxis(axisOptions,axisTheme);
+				// 	break;
+				// case AxisType.log:
+				// 	return new logAxis(axisOptions,axisTheme);
+				// 	break;
+				// case AxisType.time:
+				// 	return new timeAxis(axisOptions,axisTheme);
+				// 	break;
+				// case AxisType.date:
+				// 	return new dateAxis(axisOptions,axisTheme);
+				// 	break;
+				// default:
+				// 	return new customAxis(axisOptions,axisTheme);
+				// 	break;	
 			}
 		}
 	}
