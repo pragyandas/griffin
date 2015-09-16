@@ -354,7 +354,7 @@ var griffin;
                 this.setMarginForAxis(data, margin);
                 this.legend = this.setMarginForLegend(data, margin);
                 _super.prototype.render.call(this, data);
-                var prepData = this.dataPreparation(data);
+                this.preparedData = this.dataPreparation(data);
                 switch (this.columnOptions.isStacked) {
                     case (chart.Stacked.false):
                         this.renderGroupedColumn(data);
@@ -405,7 +405,7 @@ var griffin;
             };
             Column.prototype.renderStackedColumn = function (data) {
                 if (data.series.filter(function (d) {
-                    return (d.trendline || d.trendline === false) && d.axisId > 1;
+                    return (typeof d.trendline === 'undefined' || d.trendline === false) && d.axisId > 1;
                 }).length > 0) {
                     console.error("multiple axis can only be used with trendline when 'isStacked=true'");
                     return;
@@ -413,7 +413,7 @@ var griffin;
             };
             Column.prototype.renderNormalizedStackedColumn = function (data) {
                 if (data.series.filter(function (d) {
-                    return (d.trendline || d.trendline === false) && d.axisId > 1;
+                    return (typeof d.trendline === 'undefined' || d.trendline === false) && d.axisId > 1;
                 }).length > 0) {
                     console.error("multiple axis can only be used with trendline when 'isStacked=relative'");
                     return;

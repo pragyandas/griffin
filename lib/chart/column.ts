@@ -6,6 +6,11 @@ module griffin.chart {
 		//add more options like stroke, stroke width, etc
 		//set these in options or take it from theme
 	}
+	interface IPreparedData{
+		barData: ISeries[],
+		trendlineData: ISeries[]
+	}
+
 	export class Column extends BaseChart {
 		constructor(containerId: string) {
 			super(containerId);
@@ -13,15 +18,16 @@ module griffin.chart {
 		public columnOptions:IColumnOptions={
 			isStacked:Stacked.false
 		}
+		public preparedData: IPreparedData;
 		public categoryAxis: any;
 		public seriesAxes: [any];
 		public legend: any;
-		public render(data: IChartData) {
+		public render(data:IChartData) {
 			let margin = this.margin;
 			this.setMarginForAxis(data,margin);
 			this.legend=this.setMarginForLegend(data,margin);
 			super.render(data);
-			let prepData=this.dataPreparation(data);
+			this.preparedData=this.dataPreparation(data);
 			switch(this.columnOptions.isStacked){
 				case(Stacked.false):
 					this.renderGroupedColumn(data);
@@ -79,20 +85,21 @@ module griffin.chart {
 		private renderStackedColumn(data:IChartData){
 			//multiple axis can only be used for trendline
 			if(data.series.filter((d)=>{
-				return (d.trendline || d.trendline===false) && d.axisId>1;
+				return (typeof d.trendline==='undefined' || d.trendline===false) && d.axisId>1;
 			}).length>0)
 			{
 				console.error("multiple axis can only be used with trendline when 'isStacked=true'");
 				return;
 			}
 			
+
 			
 		}
 		
 		private renderNormalizedStackedColumn(data:IChartData){
 			//multiple axis can only be used for trendline
 			if(data.series.filter((d)=>{
-				return (d.trendline || d.trendline===false) && d.axisId>1;
+				return (typeof d.trendline==='undefined' || d.trendline===false) && d.axisId>1;
 			}).length>0)
 			{
 				console.error("multiple axis can only be used with trendline when 'isStacked=relative'");
@@ -119,7 +126,7 @@ module griffin.chart {
 			
 		}
 		
-		private dataPreparation(data:IChartData){
+		private dataPreparation(data:IChartData):IPreparedData{
 			return {barData:data.series.filter((d)=>{
 				return d.trendline!==true
 			}),trendlineData:data.series.filter((d)=>{
