@@ -1,11 +1,11 @@
 module griffin.chart {
 	interface IColumnOptions{
-		isStacked:Stacked,
-		transition: ITransition | boolean,
+		isStacked?:Stacked,
+		transition?: ITransition | boolean,
 		//add more options like stroke, stroke width, etc
 		//set these in options or take it from theme
-		categoryAxisOptions:axis.IAxisOptions,
-		valueAxesOptions:axis.IAxisOptions[]
+		categoryAxisOptions?:axis.IAxisOptions,
+		valueAxesOptions?:axis.IAxisOptions[]
 	}
 
 	interface IPreparedData{
@@ -16,31 +16,28 @@ module griffin.chart {
 		constructor(containerId: string) {
 			super(containerId);
 		}
-		private columnOptions:IColumnOptions;
+		private columnOptions: IColumnOptions = {
+			isStacked: Stacked.false,
+			transition: <ITransition>{
+				value: 'linear',
+				duration: 500,
+				delay: 200
+			}
+		};
 		private preparedData: IPreparedData;
 		private categoryAxis: any;
 		private seriesAxes: [any];
 		private legend: any;
 		public setOptions(chartOptions: IChartOptions) {
 			super.setOptions(chartOptions);
-			this.columnOptions.isStacked = chartOptions.isStacked || Stacked.false;
+			this.columnOptions.isStacked = chartOptions.isStacked || this.columnOptions.isStacked;
+			//Check for Union Type
 			if(typeof chartOptions.transition==='boolean'){
-				this.columnOptions.transition = chartOptions.transition === false ? <boolean>chartOptions.transition : <ITransition>{
-					value:'linear',
-					duration:500,
-					delay:200 
-				}
+				this.columnOptions.transition = chartOptions.transition === false ? <boolean>chartOptions.transition : <ITransition>this.columnOptions.transition;
 			}else if(typeof chartOptions.transition==='object'){
-				this.columnOptions.transition={};
-				(<ITransition>this.columnOptions.transition).value = (<ITransition>chartOptions.transition).value || 'linear';
-				(<ITransition>this.columnOptions.transition).duration = (<ITransition>chartOptions.transition).duration || 500;
-				(<ITransition>this.columnOptions.transition).delay = (<ITransition>chartOptions.transition).delay || 200;
-			}else{
-				this.columnOptions.transition = {
-					value: 'linear',
-					duration: 500,
-					delay: 200
-				};
+				(<ITransition>this.columnOptions.transition).value = (<ITransition>chartOptions.transition).value || (<ITransition>this.columnOptions.transition).value;
+				(<ITransition>this.columnOptions.transition).duration = (<ITransition>chartOptions.transition).duration || (<ITransition>this.columnOptions.transition).duration;
+				(<ITransition>this.columnOptions.transition).delay = (<ITransition>chartOptions.transition).delay || (<ITransition>this.columnOptions.transition).delay;
 			}
 
 			switch (this.columnOptions.isStacked) {
