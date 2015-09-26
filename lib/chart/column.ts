@@ -1,12 +1,13 @@
 module griffin.chart {
 	interface IColumnOptions{
-		isStacked:Stacked
+		isStacked:Stacked,
+		transition: ITransition | boolean,
 		//add more options like stroke, stroke width, etc
 		//set these in options or take it from theme
-
 		categoryAxisOptions:axis.IAxisOptions,
 		valueAxesOptions:axis.IAxisOptions[]
 	}
+
 	interface IPreparedData{
 		barData: ISeries[],
 		trendlineData: ISeries[]
@@ -23,6 +24,25 @@ module griffin.chart {
 		public setOptions(chartOptions: IChartOptions) {
 			super.setOptions(chartOptions);
 			this.columnOptions.isStacked = chartOptions.isStacked || Stacked.false;
+			if(typeof chartOptions.transition==='boolean'){
+				this.columnOptions.transition = chartOptions.transition === false ? <boolean>chartOptions.transition : <ITransition>{
+					value:'linear',
+					duration:500,
+					delay:200 
+				}
+			}else if(typeof chartOptions.transition==='object'){
+				this.columnOptions.transition={};
+				(<ITransition>this.columnOptions.transition).value = (<ITransition>chartOptions.transition).value || 'linear';
+				(<ITransition>this.columnOptions.transition).duration = (<ITransition>chartOptions.transition).duration || 500;
+				(<ITransition>this.columnOptions.transition).delay = (<ITransition>chartOptions.transition).delay || 200;
+			}else{
+				this.columnOptions.transition = {
+					value: 'linear',
+					duration: 500,
+					delay: 200
+				};
+			}
+
 			switch (this.columnOptions.isStacked) {
 				case (Stacked.false):
 					this.setGroupedColumnOptions(chartOptions);
@@ -56,35 +76,39 @@ module griffin.chart {
 
 
 		private setGroupedColumnOptions(chartOptions:IChartOptions) {
-			var margin = this.margin;
-			
 			//categoryAxisOptions
-			var categoryAxisOptions = this.columnOptions.categoryAxisOptions;
-			categoryAxisOptions.axisType = chartOptions.categoryAxisOptions.axisType || axis.AxisType.ordinal;
-			categoryAxisOptions.position = chartOptions.categoryAxisOptions.position || { x: 0, y: this.height };
-			categoryAxisOptions.direction = chartOptions.categoryAxisOptions.direction || axis.Direction.horizontal;
-			categoryAxisOptions.orient = chartOptions.categoryAxisOptions.orient || 'bottom';
+
+			chartOptions.categoryAxisOptions.axisType = chartOptions.categoryAxisOptions.axisType || axis.AxisType.ordinal;
+			chartOptions.categoryAxisOptions.position = chartOptions.categoryAxisOptions.position || { x: 0, y: this.height };
+			chartOptions.categoryAxisOptions.direction = chartOptions.categoryAxisOptions.direction || axis.Direction.horizontal;
+			chartOptions.categoryAxisOptions.orient = chartOptions.categoryAxisOptions.orient || 'bottom';
+			this.columnOptions.categoryAxisOptions = chartOptions.categoryAxisOptions;
 
 			//ValueAxisOptions
-			var valueAxesOptions = this.columnOptions.valueAxesOptions;
-			chartOptions.valueAxesOptions.forEach(function(valueAxisOption, index) {
-				valueAxesOptions.push({});
-				valueAxesOptions[index].axisType = valueAxisOption.axisType || axis.AxisType.linear;
-				valueAxesOptions[index].direction = valueAxisOption.direction || axis.Direction.vertical;
+		
+			chartOptions.valueAxesOptions.forEach((valueAxisOption, index) => {
+				
+				valueAxisOption.axisType = valueAxisOption.axisType || axis.AxisType.linear;
+				valueAxisOption.direction = valueAxisOption.direction || axis.Direction.vertical;
 				if(index===0){
-					valueAxesOptions[index].position = valueAxisOption.position || { x: 0, y: 0 };
-					valueAxesOptions[index].orient = valueAxisOption.orient || 'left';
+					valueAxisOption.position = valueAxisOption.position || { x: 0, y: 0 };
+					valueAxisOption.orient = valueAxisOption.orient || 'left';
 				}
 				else{
 					if(index%2===0){
-						valueAxesOptions[index].position = valueAxisOption.position || { x: (0 - margin.left + index * 30), y: 0 };
-						valueAxesOptions[index].orient = valueAxisOption.orient || 'left';
+						valueAxisOption.position = valueAxisOption.position || { x: (0 - this.margin.left + index * 30), y: 0 };
+						valueAxisOption.orient = valueAxisOption.orient || 'left';
 					}else{
-						valueAxesOptions[index].position = valueAxisOption.position || { x: (this.width + ((index - 1) * 20)), y: 0 };
-						valueAxesOptions[index].orient = valueAxisOption.orient || 'right';
+						valueAxisOption.position = valueAxisOption.position || { x: (this.width + ((index - 1) * 20)), y: 0 };
+						valueAxisOption.orient = valueAxisOption.orient || 'right';
 					}
 				}
+
+				this.columnOptions.valueAxesOptions[index]=valueAxisOption;
 			})
+
+
+
 		}
 
 

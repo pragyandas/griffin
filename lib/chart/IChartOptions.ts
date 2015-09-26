@@ -16,13 +16,19 @@ module griffin.chart {
 		false,
 		relative
 	}
+	export interface ITransition{
+		value?:string,
+		duration?:number,
+		delay?:number
+	}
     export interface IChartOptions {
         theme?:IThemeDetails,    
         valueAxesOptions?:axis.IAxisOptions[],
         categoryAxisOptions?:axis.IAxisOptions,
         tooltip?:boolean,
         legend?:ILegend,
-		isStacked?:Stacked       
+		isStacked?:Stacked,
+		transition: ITransition | boolean    
     }
     export interface ISeries{
 		name: string,
