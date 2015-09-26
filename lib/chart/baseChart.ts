@@ -1,4 +1,5 @@
 import axis=griffin.axis;
+import utility = griffin.utility;
 module griffin.chart {
 	export class BaseChart {
 		constructor(public containerId: string) {
@@ -14,13 +15,16 @@ module griffin.chart {
 			left:<number>30
 		}
 		public chartOptions:IChartOptions;
-        public tooltip:boolean=true;
+        public tooltip:boolean;
 		public color: string[];
 		public height: number;
 		public width: number;
 		public svg: d3.Selection<any>;
-		public theme: IThemeDetails = theme.DEFAULT;
-
+		public theme: IThemeDetails
+		public setOptions(chartOptions: IChartOptions) {
+			this.theme = chartOptions.theme || theme.DEFAULT;
+			this.tooltip = typeof chartOptions.tooltip !== 'undefined'?chartOptions.tooltip:true;
+		}
 		public render(chartData: IChartData) {
 
 			this.color = this.theme.palette;
@@ -35,12 +39,6 @@ module griffin.chart {
 				.append("g")
 				.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
 				.attr("id", this.containerId + "_svg");
-		}
-		public setOptions(chartOptions: IChartOptions) {
-			if (typeof chartOptions.theme !== 'undefined' && chartOptions.theme !== null)
-				this.theme = chartOptions.theme;
-			if (typeof chartOptions.tooltip !== 'undefined' && chartOptions.tooltip !== null)
-				this.tooltip = chartOptions.tooltip;
 		}
 	}
 }
