@@ -290,6 +290,7 @@ var griffin;
     })(chart = griffin.chart || (griffin.chart = {}));
 })(griffin || (griffin = {}));
 var axis = griffin.axis;
+var utility = griffin.utility;
 var griffin;
 (function (griffin) {
     var chart;
@@ -303,11 +304,13 @@ var griffin;
                     right: 10,
                     left: 30
                 };
-                this.tooltip = true;
-                this.theme = griffin.theme.DEFAULT;
                 this.chartWidth = document.getElementById(containerId).offsetWidth;
                 this.chartHeight = document.getElementById(containerId).offsetHeight;
             }
+            BaseChart.prototype.setOptions = function (chartOptions) {
+                this.theme = chartOptions.theme || griffin.theme.DEFAULT;
+                this.tooltip = typeof chartOptions.tooltip !== 'undefined' ? chartOptions.tooltip : true;
+            };
             BaseChart.prototype.render = function (chartData) {
                 this.color = this.theme.palette;
                 this.width = this.chartWidth - this.margin.left - this.margin.right;
@@ -320,12 +323,6 @@ var griffin;
                     .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
                     .attr("id", this.containerId + "_svg");
             };
-            BaseChart.prototype.setOptions = function (chartOptions) {
-                if (typeof chartOptions.theme !== 'undefined' && chartOptions.theme !== null)
-                    this.theme = chartOptions.theme;
-                if (typeof chartOptions.tooltip !== 'undefined' && chartOptions.tooltip !== null)
-                    this.tooltip = chartOptions.tooltip;
-            };
             return BaseChart;
         })();
         chart.BaseChart = BaseChart;
@@ -334,8 +331,7 @@ var griffin;
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var griffin;
 (function (griffin) {
@@ -346,13 +342,39 @@ var griffin;
             function Column(containerId) {
                 _super.call(this, containerId);
                 this.columnOptions = {
-                    isStacked: chart.Stacked.false
+                    isStacked: chart.Stacked.false,
+                    transition: {
+                        value: 'linear',
+                        duration: 500,
+                        delay: 200
+                    }
                 };
             }
+            Column.prototype.setOptions = function (chartOptions) {
+                _super.prototype.setOptions.call(this, chartOptions);
+                this.columnOptions.isStacked = chartOptions.isStacked || this.columnOptions.isStacked;
+                if (typeof chartOptions.transition === 'boolean') {
+                    this.columnOptions.transition = chartOptions.transition === false ? chartOptions.transition : this.columnOptions.transition;
+                }
+                else if (typeof chartOptions.transition === 'object') {
+                    this.columnOptions.transition.value = chartOptions.transition.value || this.columnOptions.transition.value;
+                    this.columnOptions.transition.duration = chartOptions.transition.duration || this.columnOptions.transition.duration;
+                    this.columnOptions.transition.delay = chartOptions.transition.delay || this.columnOptions.transition.delay;
+                }
+                switch (this.columnOptions.isStacked) {
+                    case (chart.Stacked.false):
+                        this.setGroupedColumnOptions(chartOptions);
+                        break;
+                    case (chart.Stacked.true):
+                        this.setStackedColumnOptions(chartOptions);
+                        break;
+                    case (chart.Stacked.relative):
+                        this.setNormalizedStackedColumnOptions(chartOptions);
+                        break;
+                }
+                this.margin = griffin.utility.setMargin(this.chartOptions);
+            };
             Column.prototype.render = function (data) {
-                var margin = this.margin;
-                this.setMarginForAxis(data, margin);
-                this.legend = this.setMarginForLegend(data, margin);
                 _super.prototype.render.call(this, data);
                 this.preparedData = this.dataPreparation(data);
                 switch (this.columnOptions.isStacked) {
@@ -367,41 +389,59 @@ var griffin;
                         break;
                 }
             };
-            Column.prototype.renderGroupedColumn = function (data) {
-                var margin = this.margin;
-                var valueAxisCount = d3.max(data.series.map(function (d) { return d.axisId || 0; })) + 1;
-                var categoryOptions = this.chartOptions.categoryAxisOptions;
-                categoryOptions.axisType = categoryOptions.axisType || griffin.axis.AxisType.ordinal;
-                categoryOptions.position = categoryOptions.position && categoryOptions.position !== null ? categoryOptions.position : { x: 0, y: this.height };
-                categoryOptions.direction = categoryOptions.direction && categoryOptions.direction !== null ? categoryOptions.direction : griffin.axis.Direction.horizontal;
-                this.categoryAxis = griffin.axis.AxisFactory.getAxis(categoryOptions, this.theme);
-                this.categoryAxis.draw(this.svg, data.categories);
-                for (var i = 0; i < valueAxisCount; i++) {
-                    if (i === 0) {
-                        var axisData = data.series.filter(function (d) {
-                            return typeof d.axisId === 'undefined' || d.axisId === i;
-                        }), seriesAxisOption = this.chartOptions.valueAxesOptions[i];
-                        seriesAxisOption.axisType = seriesAxisOption.axisType || griffin.axis.AxisType.linear;
-                        seriesAxisOption.position = seriesAxisOption.position && seriesAxisOption.position !== null ? seriesAxisOption.position : { x: 0, y: 0 };
-                        seriesAxisOption.direction = seriesAxisOption.direction && seriesAxisOption.direction !== null ? seriesAxisOption.direction : griffin.axis.Direction.vertical;
-                        seriesAxisOption.orient = seriesAxisOption.orient && seriesAxisOption.orient !== null ? seriesAxisOption.orient : 'left';
-                        var seriesAxis = griffin.axis.AxisFactory.getAxis(seriesAxisOption, this.theme);
-                        seriesAxis.draw(this.svg, axisData);
-                        this.seriesAxes.push(seriesAxis);
+            Column.prototype.setGroupedColumnOptions = function (chartOptions) {
+                //categoryAxisOptions
+                var _this = this;
+                chartOptions.categoryAxisOptions.axisType = chartOptions.categoryAxisOptions.axisType || griffin.axis.AxisType.ordinal;
+                chartOptions.categoryAxisOptions.position = chartOptions.categoryAxisOptions.position || { x: 0, y: this.height };
+                chartOptions.categoryAxisOptions.direction = chartOptions.categoryAxisOptions.direction || griffin.axis.Direction.horizontal;
+                chartOptions.categoryAxisOptions.orient = chartOptions.categoryAxisOptions.orient || 'bottom';
+                this.columnOptions.categoryAxisOptions = chartOptions.categoryAxisOptions;
+                chartOptions.valueAxesOptions.forEach(function (valueAxisOption, index) {
+                    valueAxisOption.axisType = valueAxisOption.axisType || griffin.axis.AxisType.linear;
+                    valueAxisOption.direction = valueAxisOption.direction || griffin.axis.Direction.vertical;
+                    if (index === 0) {
+                        valueAxisOption.position = valueAxisOption.position || { x: 0, y: 0 };
+                        valueAxisOption.orient = valueAxisOption.orient || 'left';
                     }
                     else {
-                        var axisData = data.series.filter(function (d) {
-                            return d.axisId === i;
-                        }), seriesAxisOption = this.chartOptions.valueAxesOptions[i];
-                        seriesAxisOption.axisType = seriesAxisOption.axisType || griffin.axis.AxisType.linear;
-                        seriesAxisOption.position = seriesAxisOption.position && seriesAxisOption.position !== null ? seriesAxisOption.position : (i % 2 === 0 ? { x: (0 - margin.left + i * 30), y: 0 } : { x: (this.width + ((i - 1) * 20)), y: 0 });
-                        seriesAxisOption.orient = seriesAxisOption.orient && seriesAxisOption.orient !== null ? seriesAxisOption.orient : (i % 2 === 0 ? 'left' : 'right');
-                        seriesAxisOption.direction = seriesAxisOption.direction && seriesAxisOption.direction !== null ? seriesAxisOption.direction : griffin.axis.Direction.vertical;
-                        var seriesAxis = griffin.axis.AxisFactory.getAxis(seriesAxisOption, this.theme);
-                        seriesAxis.draw(this.svg, axisData);
-                        this.seriesAxes.push(seriesAxis);
+                        if (index % 2 === 0) {
+                            valueAxisOption.position = valueAxisOption.position || { x: (0 - _this.margin.left + index * 30), y: 0 };
+                            valueAxisOption.orient = valueAxisOption.orient || 'left';
+                        }
+                        else {
+                            valueAxisOption.position = valueAxisOption.position || { x: (_this.width + ((index - 1) * 20)), y: 0 };
+                            valueAxisOption.orient = valueAxisOption.orient || 'right';
+                        }
                     }
+                    _this.columnOptions.valueAxesOptions[index] = valueAxisOption;
+                });
+            };
+            Column.prototype.setStackedColumnOptions = function (chartOptions) {
+            };
+            Column.prototype.setNormalizedStackedColumnOptions = function (chartOptions) {
+            };
+            Column.prototype.renderAxis = function (data) {
+                var valueAxisCount = d3.max(data.series.map(function (d) { return d.axisId || 0; })) + 1;
+                if (valueAxisCount > this.columnOptions.valueAxesOptions.length) {
+                    console.error('AxisOptions not provided for all the axes. Please provide axis options for each value axis used.');
+                    return;
                 }
+                this.categoryAxis = griffin.axis.AxisFactory.getAxis(this.columnOptions.categoryAxisOptions, this.theme);
+                this.categoryAxis.draw(this.svg, data.categories);
+                for (var index = 0; index < valueAxisCount; index++) {
+                    var axisData = index === 0 ? data.series.filter(function (d) {
+                        return typeof d.axisId === 'undefined' || d.axisId === index;
+                    }) : data.series.filter(function (d) {
+                        return d.axisId === index;
+                    });
+                    var seriesAxis = griffin.axis.AxisFactory.getAxis(this.columnOptions.valueAxesOptions[index], this.theme);
+                    seriesAxis.draw(this.svg, axisData);
+                    this.seriesAxes.push(seriesAxis);
+                }
+            };
+            Column.prototype.renderGroupedColumn = function (data) {
+                this.renderAxis(data);
             };
             Column.prototype.renderStackedColumn = function (data) {
                 if (data.series.filter(function (d) {
@@ -410,6 +450,7 @@ var griffin;
                     console.error("multiple axis can only be used with trendline when 'isStacked=true'");
                     return;
                 }
+                this.renderAxis(data);
             };
             Column.prototype.renderNormalizedStackedColumn = function (data) {
                 if (data.series.filter(function (d) {
@@ -418,18 +459,7 @@ var griffin;
                     console.error("multiple axis can only be used with trendline when 'isStacked=relative'");
                     return;
                 }
-            };
-            Column.prototype.setMarginForAxis = function (data, margin) {
-                var _this = this;
-                var valueAxisCount = 1;
-                data.series.forEach(function (d, i) {
-                    if (d.axisId && d.axisId > valueAxisCount) {
-                        valueAxisCount++;
-                        valueAxisCount % 2 === 0 ? _this.margin.right += 40 : _this.margin.left += 40;
-                    }
-                });
-            };
-            Column.prototype.setMarginForLegend = function (data, margin) {
+                this.renderAxis(data);
             };
             Column.prototype.drawTrendlines = function (data) {
             };
@@ -439,11 +469,6 @@ var griffin;
                     }), trendlineData: data.series.filter(function (d) {
                         return d.trendline === true;
                     }) };
-            };
-            Column.prototype.setOptions = function (chartOptions) {
-                _super.prototype.setOptions.call(this, chartOptions);
-                if (typeof chartOptions.isStacked !== 'undefined' && chartOptions.isStacked !== null)
-                    this.columnOptions.isStacked = chartOptions.isStacked;
             };
             return Column;
         })(chart.BaseChart);
@@ -498,7 +523,18 @@ var griffin;
     var utility = (function () {
         function utility() {
         }
+        utility.setMargin = function (chartOptions) {
+            var margin;
+            return margin;
+        };
+        utility.prototype.setColumnChartMargin = function (margin) {
+        };
+        utility.prototype.setColumnChartMarginForAxis = function (margin) {
+        };
+        utility.prototype.setMarginForLegend = function (margin) {
+        };
         return utility;
     })();
+    griffin.utility = utility;
 })(griffin || (griffin = {}));
 //# sourceMappingURL=griffin.js.map

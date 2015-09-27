@@ -1,6 +1,15 @@
 module griffin.chart {
     //Add all the options to the themes with default values for each theme
     //Most of the options can be same
+    export enum chartType{
+    	column,
+    	bar,
+    	area,
+    	line,
+    	pie,
+    	donut,
+    	barTable
+    }
     export interface ILegend{
             visible: boolean,
             legendTheme?:ILegendOptions

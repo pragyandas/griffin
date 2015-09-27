@@ -1,5 +1,5 @@
 module griffin.chart {
-	interface IColumnOptions{
+	export interface IColumnOptions{
 		isStacked?:Stacked,
 		transition?: ITransition | boolean,
 		//add more options like stroke, stroke width, etc
@@ -53,20 +53,39 @@ module griffin.chart {
 			}
 
 			//After setting options as margin depends on options
-			this.margin = utility.setMargin(this.chartOptions);
+			this.margin = utility.setMargin(this.columnOptions,chartType.column);
 		}
 		public render(data:IChartData) {	
 			super.render(data);
-			this.preparedData=this.dataPreparation(data);
+			var preparedData=this.dataPreparation(data);
 			switch(this.columnOptions.isStacked){
 				case(Stacked.false):
-					this.renderGroupedColumn(data);
+					this.renderAxis(data);
+					this.renderGroupedColumn(preparedData);
 					break;
 				case(Stacked.true):
-					this.renderStackedColumn(data);
+					//multiple axis can only be used for trendline
+					if (data.series.filter((d) => {
+						return (typeof d.trendline === 'undefined' || d.trendline === false) && d.axisId > 1;
+					}).length > 0) {
+						console.error("multiple axis can only be used with trendline when 'isStacked=true'");
+						return;
+					}
+
+					this.renderAxis(data);
+					this.renderStackedColumn(preparedData);
 					break;
 				case(Stacked.relative):
-					this.renderNormalizedStackedColumn(data);
+					//multiple axis can only be used for trendline
+					if (data.series.filter((d) => {
+						return (typeof d.trendline === 'undefined' || d.trendline === false) && d.axisId > 1;
+					}).length > 0) {
+						console.error("multiple axis can only be used with trendline when 'isStacked=relative'");
+						return;
+					}
+
+					this.renderAxis(data);
+					this.renderNormalizedStackedColumn(preparedData);
 					break;
 			}
 		}
@@ -143,39 +162,21 @@ module griffin.chart {
 			}
 		}
 		
-		private renderGroupedColumn(data:IChartData){
-			this.renderAxis(data);
+		private renderGroupedColumn(data:IPreparedData){
+			
 		}
 		
-		private renderStackedColumn(data:IChartData){
-			//multiple axis can only be used for trendline
-			if(data.series.filter((d)=>{
-				return (typeof d.trendline==='undefined' || d.trendline===false) && d.axisId>1;
-			}).length>0)
-			{
-				console.error("multiple axis can only be used with trendline when 'isStacked=true'");
-				return;
-			}
-
-			this.renderAxis(data);
+		private renderStackedColumn(data:IPreparedData){
+			
 		}
 		
-		private renderNormalizedStackedColumn(data:IChartData){
-			//multiple axis can only be used for trendline
-			if(data.series.filter((d)=>{
-				return (typeof d.trendline==='undefined' || d.trendline===false) && d.axisId>1;
-			}).length>0)
-			{
-				console.error("multiple axis can only be used with trendline when 'isStacked=relative'");
-				return;
-			}
-
-			this.renderAxis(data);
+		private renderNormalizedStackedColumn(data:IPreparedData){
+			
 		}
 		
 		
 		
-		private drawTrendlines(data:IChartData){
+		private drawTrendlines(data:IPreparedData){
 			
 		}
 		
