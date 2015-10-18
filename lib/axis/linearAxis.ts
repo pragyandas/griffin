@@ -2,12 +2,13 @@ module griffin.axis{
 	interface IAxisData{
 		
 	}
-	export class linearAxis{
+	export class LinearAxis{
 		//create IAxisData but do not export
 		public axisData: IAxisData;
 		public axisOptions:IAxisOptions={
-			direction:Direction.vertical,
-			orient:'left',
+			perspective:Perspective.vertical,
+			direction:Direction.left,
+			orient:Direction.left,
 			ticks:5,
 			fontSize:12,//theme
 			fontFamily:'sans-serif',//theme
@@ -17,10 +18,6 @@ module griffin.axis{
 			},
 			showGridlines:true,//theme
 			tickFormat:'',//write format function here and add the data type
-			position:{
-				x:0,
-				y:0
-			},
 			clamp:true,//true
 			axisColor:'#000',//theme
 			pathVisible:true,//theme
@@ -28,6 +25,8 @@ module griffin.axis{
 			tickColor:'#000',//theme
 		};
 		constructor(axisOptions:IAxisOptions,public axisTheme: IThemeDetails){
+			if (typeof axisOptions.perspective !== 'undefined' && axisOptions.perspective !== null)
+				this.axisOptions.perspective = axisOptions.perspective;
 			if (typeof axisOptions.direction !== 'undefined' && axisOptions.direction !== null)
 				this.axisOptions.direction = axisOptions.direction;
 			if (typeof axisOptions.orient !== 'undefined' && axisOptions.orient !== null)
@@ -57,7 +56,7 @@ module griffin.axis{
 			if (typeof axisOptions.tickColor !== 'undefined' && axisOptions.tickColor !== null)
 				this.axisOptions.tickColor = axisOptions.tickColor;
 		}
-		public draw(svg:d3.Selection<any>,axisData:any){
+		public draw(svg:d3.Selection<any>,position:IPosition,axisData:any){
 			this.axisData=axisData;
 		}
 	}

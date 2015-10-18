@@ -8,7 +8,7 @@ module griffin.chart {
 		}
 		public chartWidth: number;
 		public chartHeight: number;
-		protected margin={
+		public margin={
 			top:<number>15,
 			bottom:<number>20,
 			right:<number>10,
@@ -20,12 +20,12 @@ module griffin.chart {
 		public height: number;
 		public width: number;
 		public svg: d3.Selection<any>;
-		public theme: IThemeDetails
-		public setOptions(chartOptions: IChartOptions) {
-			this.theme = chartOptions.theme || theme.DEFAULT;
+		public theme: IThemeDetails = theme.DEFAULT;
+		protected setOptions(chartOptions: IChartOptions) {
+			this.theme = chartOptions.theme || this.theme;
 			this.tooltip = typeof chartOptions.tooltip !== 'undefined'?chartOptions.tooltip:true;
 		}
-		public render(chartData: IChartData) {
+		protected render(chartData: IChartData) {
 
 			this.color = this.theme.palette;
 

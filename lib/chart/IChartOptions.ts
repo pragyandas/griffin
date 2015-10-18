@@ -1,4 +1,4 @@
-module griffin.chart {
+module griffin{
     //Add all the options to the themes with default values for each theme
     //Most of the options can be same
     export enum chartType{
@@ -14,6 +14,64 @@ module griffin.chart {
             visible: boolean,
             legendTheme?:ILegendOptions
     }
+
+    export enum AxisType {
+        linear,
+        percentage,
+        log,
+        time,
+        date,
+        ordinal,
+        custom
+    }
+    export enum Perspective {
+        vertical,
+        horizontal
+    }
+
+    export enum Direction {
+        top,
+        bottom,
+        left,
+        right
+    }
+
+    export interface IPosition {
+        x: number,
+        y: number
+    }
+
+    export interface IAxisProperties {
+        perspective: Perspective,
+        direction: Direction,
+        orient: Direction,
+        position: IPosition
+    }
+
+    export interface IAxisOptions {
+        axisType?: AxisType,
+        ticks?: number,
+        scale?: any,
+        fontSize?: number,
+        fontFamily?: string,
+        title?: {
+            visible: boolean,
+            text?: string
+        },
+        showGridlines?: boolean,
+        innerPadding?: number,
+        outerPadding?: number,
+        tickFormat?: any,
+        clamp?: boolean,
+        axisColor?: string,
+        labelRotate?: string,//if auto then
+        pathVisible?: boolean,
+        aec?: number,//axis-extrapolation-coefficient
+        tickColor?: string,
+        _max?: number,
+        _min?: number
+    }
+
     export interface IChartMargin{
 		top:number,
 		bottom:number,
