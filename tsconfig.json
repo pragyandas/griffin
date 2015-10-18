@@ -6,7 +6,7 @@
 		"noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
-		"out":"./dist/griffin.js"
+        "outFile": "./dist/griffin.js"
 	},
 	"formatCodeOptions": {
         "indentSize": 4,
@@ -21,9 +21,5 @@
         "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
         "placeOpenBraceOnNewLineForFunctions": false,
         "placeOpenBraceOnNewLineForControlBlocks": false
-    },
-	"filesGlob": [
-        "./lib/**/*.ts",
-		"./typings/**/*.ts"
-    ]
+    }
 }

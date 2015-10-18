@@ -48,8 +48,6 @@ module griffin.axis{
 				this.axisOptions.showGridlines = axisOptions.showGridlines;
 			if (typeof axisOptions.tickFormat !== 'undefined' && axisOptions.tickFormat !== null)
 				this.axisOptions.tickFormat = axisOptions.tickFormat;
-			if (typeof axisOptions.position !== 'undefined' && axisOptions.position !== null)
-				this.axisOptions.position = axisOptions.position;
 			if (typeof axisOptions.clamp !== 'undefined' && axisOptions.clamp !== null)
 				this.axisOptions.clamp = axisOptions.clamp;
 			if (typeof axisOptions.axisColor !== 'undefined' && axisOptions.axisColor !== null)

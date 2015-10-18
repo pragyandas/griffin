@@ -1,20 +1,16 @@
-module griffin.axis{
-	interface IAxisData{
-		
+module griffin.axis {
+	interface IAxisData {
+
 	}
-	export class percentageAxis{
-		//create IAxisData but do not export
-		public axisData:IAxisData
-		public axisOptions:IAxisOptions={
+	export class PercentageAxis {
+		public axisData: IAxisData
+		public axisOptions: IAxisOptions = {
 			//default options
 		};
-		constructor(){
+		constructor(axisOptions: IAxisOptions, axisProperties: IAxisProperties, public axisTheme?: IThemeDetails) {
 		}
-		public setAxisOptions(axisOptions:IAxisOptions){
-			//Override the default values
-		}
-		public draw(svg:d3.Selection<any>,axisData:any){
-			this.axisData=axisData;
+		public draw(svg: d3.Selection<any>, axisData: any) {
+			this.axisData = axisData;
 		}
 	}
 }
