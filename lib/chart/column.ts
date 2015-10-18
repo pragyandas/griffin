@@ -5,13 +5,13 @@ module griffin.chart {
 		//add more options like stroke, stroke width, etc
 		//set these in options or take it from theme
 		barOptions: IBarOptions,
-		categoryAxisOptions?:axis.IAxisOptions,
-		valueAxesOptions?: axis.IAxisOptions[]
+		categoryAxisOptions?:IAxisOptions,
+		valueAxesOptions?: IAxisOptions[]
 	}
 
-	interface IAxisProperties{
-		categoryAxisProperties?: axis.IAxisProperties,
-		valueAxesProperties?: axis.IAxisProperties[]
+	interface IColumnAxisProperties{
+		categoryAxisProperties?: IAxisProperties,
+		valueAxesProperties?: IAxisProperties[]
 	}
 
 	interface IBarOptions{
@@ -49,7 +49,7 @@ module griffin.chart {
 		private categoryAxis: any;
 		private seriesAxes: [any];
 		private legend: any;
-		private axisProperties: IAxisProperties;
+		private axisProperties: IColumnAxisProperties;
 		public setOptions(chartOptions: IChartOptions) {
 			super.setOptions(chartOptions);
 			this.columnOptions.isStacked = chartOptions.isStacked || this.columnOptions.isStacked;
@@ -115,41 +115,38 @@ module griffin.chart {
 
 		private setGroupedColumnOptions(chartOptions:IChartOptions) {
 			//categoryAxisOptions
-			chartOptions.categoryAxisOptions.axisType = chartOptions.categoryAxisOptions.axisType || axis.AxisType.ordinal;
+			chartOptions.categoryAxisOptions.axisType = chartOptions.categoryAxisOptions.axisType || AxisType.ordinal;
 			this.columnOptions.categoryAxisOptions = chartOptions.categoryAxisOptions;
-			chartOptions.categoryAxisOptions.direction = chartOptions.categoryAxisOptions.direction || axis.Direction.bottom;//{ x: 0, y: this.height };
-			chartOptions.categoryAxisOptions.perspective = chartOptions.categoryAxisOptions.perspective || axis.Perspective.horizontal;
-			chartOptions.categoryAxisOptions.orient = chartOptions.categoryAxisOptions.orient || axis.Direction.bottom;
 			this.axisProperties.categoryAxisProperties = {
-				perspective: axis.Perspective.horizontal,
-				direction: axis.Direction.bottom,
-				orient: axis.Direction.bottom,
+				perspective:Perspective.horizontal,
+				direction: Direction.bottom,
+				orient: Direction.bottom,
 				position :{ x: 0, y: this.height }
 			};
 			//ValueAxisOptions
 			chartOptions.valueAxesOptions.forEach((valueAxisOption, index) => {
-				let position = { x:0, y:0 };
-				valueAxisOption.axisType = valueAxisOption.axisType || axis.AxisType.linear;
-				valueAxisOption.perspective = valueAxisOption.perspective || axis.Perspective.vertical;
+				let valueAxisProperty:IAxisProperties;
+				valueAxisOption.axisType = valueAxisOption.axisType || AxisType.linear;
+				valueAxisProperty.perspective = Perspective.vertical;
 				if(index===0){
-					valueAxisOption.direction = valueAxisOption.direction || axis.Direction.left;
-					valueAxisOption.orient = valueAxisOption.orient || axis.Direction.left;
-
+					valueAxisProperty.direction = Direction.left;
+					valueAxisProperty.orient = Direction.left;
+					valueAxisProperty.position = { x: 0, y: 0 };
 				}
 				else{
 					if(index%2===0){
-						valueAxisOption.direction = valueAxisOption.direction || axis.Direction.left;
-						valueAxisOption.orient = valueAxisOption.orient || axis.Direction.left;
-						position = { x: (0 - this.margin.left + index * 30), y: 0 };
+						valueAxisProperty.direction = Direction.left;
+						valueAxisProperty.orient = Direction.left;
+						valueAxisProperty.position = { x: (0 - this.margin.left + index * 30), y: 0 };
 					}else{
-						valueAxisOption.direction = valueAxisOption.direction || axis.Direction.right;
-						valueAxisOption.orient = valueAxisOption.orient || axis.Direction.right;
-						position = { x: (this.width + ((index - 1) * 20)), y: 0 };
+						valueAxisProperty.direction = Direction.right;
+						valueAxisProperty.orient = Direction.right;
+						valueAxisProperty.position = { x: (this.width + ((index - 1) * 20)), y: 0 };
 					}
 				}
 
 				this.columnOptions.valueAxesOptions[index]=valueAxisOption;
-				this.axisPosition.valueAxesPosition[index] = position;
+				this.axisProperties.valueAxesProperties[index] = valueAxisProperty;
 			})
 		}
 
@@ -166,8 +163,8 @@ module griffin.chart {
 				return;
 			}
 
-			this.categoryAxis = axis.AxisFactory.getAxis(this.columnOptions.categoryAxisOptions, this.theme);
-			this.categoryAxis.draw(this.svg,this.axisPosition.categoryAxisPosition,data.categories);
+			this.categoryAxis = axis.AxisFactory.getAxis(this.columnOptions.categoryAxisOptions,this.axisProperties.categoryAxisProperties,this.theme);
+			this.categoryAxis.draw(this.svg,data.categories);
 
 
 			for (var index = 0; index < valueAxisCount; index++) {
@@ -177,8 +174,8 @@ module griffin.chart {
 					return d.axisId === index
 				});
 
-				let seriesAxis = axis.AxisFactory.getAxis(this.columnOptions.valueAxesOptions[index], this.theme);
-				seriesAxis.draw(this.svg,this.axisPosition.valueAxesPosition[index],axisData);
+				let seriesAxis = axis.AxisFactory.getAxis(this.columnOptions.valueAxesOptions[index],this.axisProperties.valueAxesProperties[index],this.theme);
+				seriesAxis.draw(this.svg,axisData);
 				this.seriesAxes.push(seriesAxis);
 			}
 		}

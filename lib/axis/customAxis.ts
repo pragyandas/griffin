@@ -2,16 +2,12 @@ module griffin.axis{
 	interface IAxisData{
 		
 	}
-	export class customAxis{
-		//create IAxisData but do not export
+	export class CustomAxis{
 		public axisData:IAxisData
 		public axisOptions:IAxisOptions={
 			//default options
 		};
-		constructor(){
-		}
-		public setAxisOptions(axisOptions:IAxisOptions){
-			//Override the default values
+		constructor(axisOptions: IAxisOptions, axisProperties: IAxisProperties, public axisTheme?: IThemeDetails) {
 		}
 		public draw(svg:d3.Selection<any>,axisData:any){
 			this.axisData=axisData;

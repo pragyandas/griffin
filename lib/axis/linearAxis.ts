@@ -5,10 +5,13 @@ module griffin.axis{
 	export class LinearAxis{
 		//create IAxisData but do not export
 		public axisData: IAxisData;
+		private axisProperties: IAxisProperties = {
+			perspective: Perspective.horizontal,
+			direction: Direction.bottom,
+			orient: Direction.bottom,
+			position: { x: 0, y: 0 }
+		};
 		public axisOptions:IAxisOptions={
-			perspective:Perspective.vertical,
-			direction:Direction.left,
-			orient:Direction.left,
 			ticks:5,
 			fontSize:12,//theme
 			fontFamily:'sans-serif',//theme
@@ -24,13 +27,15 @@ module griffin.axis{
 			aec:0.1,
 			tickColor:'#000',//theme
 		};
-		constructor(axisOptions:IAxisOptions,public axisTheme: IThemeDetails){
-			if (typeof axisOptions.perspective !== 'undefined' && axisOptions.perspective !== null)
-				this.axisOptions.perspective = axisOptions.perspective;
-			if (typeof axisOptions.direction !== 'undefined' && axisOptions.direction !== null)
-				this.axisOptions.direction = axisOptions.direction;
-			if (typeof axisOptions.orient !== 'undefined' && axisOptions.orient !== null)
-				this.axisOptions.orient = axisOptions.orient;
+		constructor(axisOptions:IAxisOptions,axisProperties:IAxisProperties,public axisTheme: IThemeDetails){
+			if (typeof axisProperties.perspective !== 'undefined' && axisProperties.perspective !== null)
+				this.axisProperties.perspective = axisProperties.perspective;
+			if (typeof axisProperties.direction !== 'undefined' && axisProperties.direction !== null)
+				this.axisProperties.direction = axisProperties.direction;
+			if (typeof axisProperties.orient !== 'undefined' && axisProperties.orient !== null)
+				this.axisProperties.orient = axisProperties.orient;
+			if (typeof axisProperties.position !== 'undefined' && axisProperties.position !== null)
+				this.axisProperties.position = axisProperties.position;
 			if (typeof axisOptions.ticks !== 'undefined' && axisOptions.ticks !== null)
 				this.axisOptions.ticks = axisOptions.ticks;
 			if (typeof axisOptions.fontSize !== 'undefined' && axisOptions.fontSize !== null)
@@ -56,7 +61,7 @@ module griffin.axis{
 			if (typeof axisOptions.tickColor !== 'undefined' && axisOptions.tickColor !== null)
 				this.axisOptions.tickColor = axisOptions.tickColor;
 		}
-		public draw(svg:d3.Selection<any>,position:IPosition,axisData:any){
+		public draw(svg:d3.Selection<any>,axisData:any){
 			this.axisData=axisData;
 		}
 	}

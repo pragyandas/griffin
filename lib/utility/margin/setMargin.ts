@@ -1,12 +1,10 @@
-import chart = griffin.chart;
-import axis = griffin.axis;
 module griffin{
 	export class utility{
 		public static chartCofiguration = {};
-		public static setMargin(c:any,cType:chart.chartType){
+		public static setMargin(c:any,cType:chartType){
 			//write a switch case for chartTypes
 			switch (cType){
-				case (chart.chartType.column): {
+				case (chartType.column): {
 					this.setColumnChartMargin(<chart.Column>c);
 				}
 			}
@@ -15,8 +13,8 @@ module griffin{
 		private static setColumnChartMargin(c:chart.Column) {
 			var margin=c.margin;
 			c.columnOptions.valueAxesOptions.forEach((valueAxisOption)=>{
-				if(valueAxisOption.direction)
-					margin.
+				// if(valueAxisOption.direction)
+				// 	margin.
 			})
 
 		}
