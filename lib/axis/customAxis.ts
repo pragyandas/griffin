@@ -7,7 +7,10 @@ module griffin.axis{
 		public axisOptions:IAxisOptions={
 			//default options
 		};
-		constructor(axisOptions: IAxisOptions, axisProperties: IAxisProperties, public axisTheme?: IThemeDetails) {
+		constructor(axisProperties: IAxisProperties, public axisTheme?: IThemeDetails) {
+		}
+		public setOptions(axisOptions: IAxisOptions){
+			//setOptions
 		}
 		public draw(svg:d3.Selection<any>,axisData:any){
 			this.axisData=axisData;

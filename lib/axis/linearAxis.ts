@@ -1,6 +1,6 @@
 module griffin.axis{
 	interface IAxisData{
-		
+
 	}
 	export class LinearAxis{
 		//create IAxisData but do not export
@@ -27,7 +27,7 @@ module griffin.axis{
 			aec:0.1,
 			tickColor:'#000',//theme
 		};
-		constructor(axisOptions:IAxisOptions,axisProperties:IAxisProperties,public axisTheme: IThemeDetails){
+		constructor(axisProperties:IAxisProperties,public axisTheme: IThemeDetails){
 			if (typeof axisProperties.perspective !== 'undefined' && axisProperties.perspective !== null)
 				this.axisProperties.perspective = axisProperties.perspective;
 			if (typeof axisProperties.direction !== 'undefined' && axisProperties.direction !== null)
@@ -36,6 +36,8 @@ module griffin.axis{
 				this.axisProperties.orient = axisProperties.orient;
 			if (typeof axisProperties.position !== 'undefined' && axisProperties.position !== null)
 				this.axisProperties.position = axisProperties.position;
+		}
+		public setOptions(axisOptions:IAxisOptions){
 			if (typeof axisOptions.ticks !== 'undefined' && axisOptions.ticks !== null)
 				this.axisOptions.ticks = axisOptions.ticks;
 			if (typeof axisOptions.fontSize !== 'undefined' && axisOptions.fontSize !== null)

@@ -1,29 +1,29 @@
 module griffin.axis {
 
 	export class AxisFactory {
-		public static getAxis(axisOptions: IAxisOptions, axisProperties: IAxisProperties, axisTheme: IThemeDetails = theme.DEFAULT):any {
-			switch (axisOptions.axisType) {
+		public static getAxis(axisType:AxisType,axisProperties: IAxisProperties, axisTheme: IThemeDetails = theme.DEFAULT):any {
+			switch (axisType) {
 				case AxisType.ordinal:
-					return new OrdinalAxis(axisOptions, axisProperties, axisTheme);
+					return new OrdinalAxis(axisProperties, axisTheme);
 					break;
 				case AxisType.linear:
-					return new LinearAxis(axisOptions, axisProperties, axisTheme);
+					return new LinearAxis(axisProperties, axisTheme);
 					break;
 				case AxisType.percentage:
-					return new PercentageAxis(axisOptions, axisProperties, axisTheme);
+					return new PercentageAxis(axisProperties, axisTheme);
 					break;
 				case AxisType.log:
-					return new LogAxis(axisOptions, axisProperties,axisTheme);
+					return new LogAxis(axisProperties,axisTheme);
 					break;
 				case AxisType.time:
-					return new TimeAxis(axisOptions, axisProperties,axisTheme);
+					return new TimeAxis(axisProperties,axisTheme);
 					break;
 				case AxisType.date:
-					return new DateAxis(axisOptions, axisProperties,axisTheme);
+					return new DateAxis(axisProperties,axisTheme);
 					break;
 				default:
-					return new CustomAxis(axisOptions,axisProperties,axisTheme);
-					break;	
+					return new CustomAxis(axisProperties,axisTheme);
+					break;
 			}
 		}
 	}
