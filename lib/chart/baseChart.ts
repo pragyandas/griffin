@@ -1,5 +1,4 @@
 import axis=griffin.axis;
-import utility = griffin.utility;
 module griffin.chart {
 	export class BaseChart {
 		constructor(public containerId: string) {
@@ -9,10 +8,10 @@ module griffin.chart {
 		public chartWidth: number;
 		public chartHeight: number;
 		public margin={
-			top:<number>15,
-			bottom:<number>20,
-			right:<number>10,
-			left:<number>30
+			top:<number>0,
+			bottom:<number>0,
+			right:<number>0,
+			left:<number>0
 		}
 		public chartOptions:IChartOptions;
         public tooltip:boolean;

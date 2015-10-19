@@ -1,6 +1,6 @@
 module griffin.axis{
 	interface IAxisData{
-		
+
 	}
 	export class CustomAxis{
 		public axisData:IAxisData

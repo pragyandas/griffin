@@ -45,11 +45,12 @@ module griffin.chart {
 			}
 		};
 		public chartData: IChartData;
+		public axisProperties: IColumnAxisProperties;
 		private preparedData: IPreparedData;
 		private categoryAxis: any;
 		private seriesAxes: [any];
 		private legend: any;
-		private axisProperties: IColumnAxisProperties;
+
 		public setOptions(chartOptions: IChartOptions) {
 			super.setOptions(chartOptions);
 			this.columnOptions.isStacked = chartOptions.isStacked || this.columnOptions.isStacked;
@@ -78,7 +79,7 @@ module griffin.chart {
 
 		public render(data:IChartData) {
 			this.chartData = data;
-			utility.setMargin(this,chartType.column);	
+			Utility.setMargin(this,chartType.column);
 			super.render(this.chartData);
 			var preparedData=this.dataPreparation(this.chartData);
 			switch(this.columnOptions.isStacked){
@@ -166,7 +167,6 @@ module griffin.chart {
 			this.categoryAxis = axis.AxisFactory.getAxis(this.columnOptions.categoryAxisOptions,this.axisProperties.categoryAxisProperties,this.theme);
 			this.categoryAxis.draw(this.svg,data.categories);
 
-
 			for (var index = 0; index < valueAxisCount; index++) {
 				let axisData = index === 0 ? data.series.filter((d) => {
 					return typeof d.axisId === 'undefined' || d.axisId === index
@@ -175,24 +175,31 @@ module griffin.chart {
 				});
 
 				let seriesAxis = axis.AxisFactory.getAxis(this.columnOptions.valueAxesOptions[index],this.axisProperties.valueAxesProperties[index],this.theme);
-				seriesAxis.draw(this.svg,axisData);
 				this.seriesAxes.push(seriesAxis);
+				seriesAxis.draw(this.svg,axisData);
 			}
 		}
-		
+
+		private checkLabelOverlap():boolean{
+			d3.select('#'+this.categoryAxis.axisId).selectAll('text')[0].forEach(node=>{
+				
+			})
+			return false;
+		}
+
 		private renderGroupedColumn(data:IPreparedData){
 
 		}
-		
-		private renderStackedColumn(data:IPreparedData){		
+
+		private renderStackedColumn(data:IPreparedData){
 		}
-		
+
 		private renderNormalizedStackedColumn(data:IPreparedData){
 		}
-				
-		private drawTrendlines(data:IPreparedData){	
+
+		private drawTrendlines(data:IPreparedData){
 		}
-		
+
 		private dataPreparation(data:IChartData):IPreparedData{
 			return {barData:data.series.filter((d)=>{
 				return d.trendline!==true

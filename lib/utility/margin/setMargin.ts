@@ -1,5 +1,5 @@
 module griffin{
-	export class utility{
+	export class Utility{
 		public static chartCofiguration = {};
 		public static setMargin(c:any,cType:chartType){
 			//write a switch case for chartTypes
@@ -9,17 +9,29 @@ module griffin{
 				}
 			}
 		}
-		
+
 		private static setColumnChartMargin(c:chart.Column) {
 			var margin=c.margin;
-			c.columnOptions.valueAxesOptions.forEach((valueAxisOption)=>{
-				// if(valueAxisOption.direction)
-				// 	margin.
+
+			//For value axis
+			c.axisProperties.valueAxesProperties.forEach((valueAxisProperty)=>{
+				switch(valueAxisProperty.direction){
+					case(Direction.left):
+						margin.left+=30;
+						break;
+					case(Direction.right):
+						margin.right+=30;
+						break;
+				}
 			})
 
+			//For category axis
+			margin.bottom+=30;
+
+			//Set margin for legend depeneding on legend direction
 		}
-		
-		
+
+
 		// private static ordinalAxisLabelRotation(categories:chart.ICategory[]){
 		// 	categories.forEach((category)=>{
 		// 		var label=category.label || category.name || category.value;
@@ -27,19 +39,6 @@ module griffin{
 		// 		//draw text nodes and calculate the width
 		// 	})
 		// 	//get cumulative text node width and compare to width
-		// } 
+		// }
 	}
 }
-
-
-
-// private setMarginForAxis(data:IChartData, margin:IChartMargin){
-// 	//Set margin after axis position
-// 	let valueAxisCount = 1;
-// 	data.series.forEach((d, i) => {
-// 		if (d.axisId && d.axisId > valueAxisCount) {
-// 			valueAxisCount++;
-// 			valueAxisCount % 2 === 0 ? this.margin.right += 40 : this.margin.left += 40;
-// 		}
-// 	})
-// }

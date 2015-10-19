@@ -13,6 +13,7 @@ module griffin.axis{
 			orient: Direction.bottom,
 			position:{x:0,y:0}
 		};
+		public axisId:string;
 		public axisOptions:IAxisOptions={
 			fontSize:12,//theme
 			fontFamily:'sans-serif',//theme
@@ -58,10 +59,10 @@ module griffin.axis{
 			if (typeof axisOptions.tickColor !== 'undefined' && axisOptions.tickColor !== null)
 				this.axisOptions.tickColor = axisOptions.tickColor;
 		}
-		public draw(svg:d3.Selection<any>,position:IPosition,axisData:[IAxisData],axisId?:string){
+		public draw(svg:d3.Selection<any>,axisData:[IAxisData],axisId?:string){
 			switch(this.axisProperties.perspective){
 				case (Perspective.horizontal):
-					var axisId = axisId || <string>svg.attr('id') + '_xAxis';
+					this.axisId = axisId || <string>svg.attr('id') + '_xAxis';
 					let width = parseFloat(svg.attr('width'));
 					this.scale = d3.scale.ordinal()
                         .domain(axisData.map((d)=>{return d.value}))
@@ -73,7 +74,7 @@ module griffin.axis{
 
 					var axis = svg.append('g')
 							  .attr('class', 'x axis')
-							  .attr('id', axisId)
+							  .attr('id', this.axisId)
 							  .call(xAxis)
 							  .attr("transform","translate(" + this.axisProperties.position.x + "," + this.axisProperties.position.y + ")");
 
