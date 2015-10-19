@@ -1,25 +1,58 @@
 {
-	"compilerOptions": {
-		"target": "ES5",
-		"module": "commonjs",
-		"sourceMap": true,
-		"noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "outFile": "./dist/griffin.js"
-	},
-	"formatCodeOptions": {
-        "indentSize": 4,
-        "tabSize": 4,
-        "newLineCharacter": "\r\n",
-        "convertTabsToSpaces": true,
-        "insertSpaceAfterCommaDelimiter": true,
-        "insertSpaceAfterSemicolonInForStatements": true,
-        "insertSpaceBeforeAndAfterBinaryOperators": true,
-        "insertSpaceAfterKeywordsInControlFlowStatements": true,
-        "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
-        "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
-        "placeOpenBraceOnNewLineForFunctions": false,
-        "placeOpenBraceOnNewLineForControlBlocks": false
-    }
+ "compilerOptions": {
+  "target": "ES5",
+  "module": "commonjs",
+  "sourceMap": true,
+  "noImplicitAny": true,
+  "removeComments": true,
+  "preserveConstEnums": true,
+  "outDir": "dist"
+ },
+ "formatCodeOptions": {
+  "indentSize": 4,
+  "tabSize": 4,
+  "newLineCharacter": "\r\n",
+  "convertTabsToSpaces": true,
+  "insertSpaceAfterCommaDelimiter": true,
+  "insertSpaceAfterSemicolonInForStatements": true,
+  "insertSpaceBeforeAndAfterBinaryOperators": true,
+  "insertSpaceAfterKeywordsInControlFlowStatements": true,
+  "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+  "placeOpenBraceOnNewLineForFunctions": false,
+  "placeOpenBraceOnNewLineForControlBlocks": false
+ },
+ "filesGlob": [
+  "./lib/**/*.ts",
+  "./typings/**/*.ts"
+ ],
+ "files": [
+  "lib/axis/axisFactory.ts",
+  "lib/axis/customAxis.ts",
+  "lib/axis/dateAxis.ts",
+  "lib/axis/linearAxis.ts",
+  "lib/axis/logAxis.ts",
+  "lib/axis/ordinalAxis.ts",
+  "lib/axis/percentageAxis.ts",
+  "lib/axis/timeAxis.ts",
+  "lib/chart/area.ts",
+  "lib/chart/bar.ts",
+  "lib/chart/barTable.ts",
+  "lib/chart/baseChart.ts",
+  "lib/chart/column.ts",
+  "lib/chart/donut.ts",
+  "lib/chart/line.ts",
+  "lib/chart/pie.ts",
+  "lib/IChartOptions.ts",
+  "lib/legend/ILegendOptions.ts",
+  "lib/legend/legendBase.ts",
+  "lib/theme/IThemeDetails.ts",
+  "lib/theme/theme.ts",
+  "lib/utility/margin/setMargin.ts",
+  "typings/d3/d3.d.ts",
+  "typings/tsd.d.ts"
+ ],
+ "exclude": [],
+ "buildOnSave": true,
+ "compileOnSave": true
 }
