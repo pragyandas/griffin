@@ -32,8 +32,8 @@ module griffin.chart {
 			this.height = this.chartHeight - this.margin.top - this.margin.bottom;
 
 			this.svg = d3.select("#" + this.containerId).append("svg")
-				.attr("width", this.width + this.margin.left + this.margin.right)
-				.attr("height", this.height + this.margin.top + this.margin.bottom)
+				.attr("width", this.chartWidth)
+				.attr("height", this.chartHeight)
 				.style('background-color', this.theme.backgroundColor)
 				.append("g")
 				.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")

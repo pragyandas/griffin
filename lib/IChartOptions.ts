@@ -10,11 +10,6 @@ module griffin {
         donut,
         barTable
     }
-    export interface ILegend {
-        visible: boolean,
-        legendTheme?: ILegendOptions
-    }
-
     export enum AxisType {
         linear,
         percentage,
@@ -23,6 +18,10 @@ module griffin {
         date,
         ordinal,
         custom
+    }
+    export interface ILegend {
+        visible: boolean,
+        legendTheme?: ILegendOptions
     }
     export enum Perspective {
         vertical,
@@ -64,7 +63,10 @@ module griffin {
         tickFormat?: any,
         clamp?: boolean,
         axisColor?: string,
-        labelRotate?: string,//if auto then
+        labelRotate?: string,//if auto then,
+        textAnchor?:string,
+        dx?:string,//in em
+        dy?:string,//in em
         pathVisible?: boolean,
         aec?: number,//axis-extrapolation-coefficient
         tickColor?: string,
@@ -106,8 +108,8 @@ module griffin {
         trendline: boolean
     }
     export interface ICategory {
-        name: string,
         value: string,
+        name?: string,
         label?: string
     }
     export interface IMetadata {

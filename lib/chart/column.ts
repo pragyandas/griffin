@@ -185,8 +185,39 @@ module griffin.chart {
             }
         }
         private applyCategoryAxisLabelRotation() {
-            var axis = d3.select('#' + this.categoryAxis.axisId);
-						//
+						(function rotateLabelSetMargin(degree:number){
+							if(degree===45){
+								this.categoryAxis.setOptions({dx:"-.8em",dy:".15em",textAnchor:'end',labelRotate:'45'});
+
+								this.categoryAxis.draw(this.svg,this.chartData.categories);
+								if(checkCategoryAxisOverlap())
+									rotateLabelSetMargin(90);
+							}
+							else if(degree===90){
+								this.categoryAxis.setOptions({dx:"-.8em",dy:".15em",textAnchor:'end',labelRotate:'90'});
+								this.categoryAxis.draw(this.svg,this.chartData.categories);
+							}
+							else{
+								if(checkCategoryAxisOverlap()){
+									this.prepareCategoryLabel(10);
+									this.margin.bottom+=10;
+									this.height = this.chartHeight - this.margin.top - this.margin.bottom;
+									rotateLabelSetMargin(45);
+								}
+							}
+						}).bind(this)(0);
+
+						function checkCategoryAxisOverlap():boolean{
+							var axis:d3.Selection<any> = d3.select('#' + this.categoryAxis.axisId),prevBoundingRectRight:number=0,overlap:boolean=false;
+							axis.selectAll('text').each(function(d){
+  							if(this.getBoundingClientRect().left<prevBoundingRectRight){
+									overlap=true;
+									return;
+  							}
+  							prevBoundingRectRight=this.getBoundingClientRect().right;
+							});
+							return overlap;
+						}
         }
         private renderGroupedColumn(data: IPreparedData) {
 
@@ -202,6 +233,7 @@ module griffin.chart {
         }
 
         private dataPreparation(data: IChartData): IPreparedData {
+						this.prepareCategoryLabel();
             return {
                 barData: data.series.filter((d) => {
                     return d.trendline !== true
@@ -210,5 +242,15 @@ module griffin.chart {
                 })
             }
         }
+				private prepareCategoryLabel(labelLength?:number){
+					if(!labelLength)
+						this.chartData.categories.forEach((category)=>{
+							category.label=category.label || category.name || category.value;
+						})
+					else
+					this.chartData.categories.forEach((category)=>{
+						category.label=category.label.slice(0,labelLength);
+					})
+				}
     }
 }

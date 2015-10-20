@@ -1,7 +1,8 @@
 module griffin.axis {
     interface IAxisData {
-        name: string,
-        value: string
+        value: string,
+        name?:string,
+        label?:string
     }
     export class OrdinalAxis {
         //create IAxisData but do not export
@@ -24,6 +25,9 @@ module griffin.axis {
             clamp: true,//theme
             axisColor: '#000',//theme
             labelRotate: 'auto',
+            textAnchor: 'middle',
+            dx: "0em",
+            dy: "0em",
             pathVisible: true,//theme
             tickColor: '#000'//theme
         };
@@ -37,31 +41,37 @@ module griffin.axis {
             if (typeof axisProperties.position !== 'undefined' && axisProperties.position !== null)
                 this.axisProperties.position = axisProperties.position;
         }
-				public setOptions(axisOptions: IAxisOptions){
-					if (typeof axisOptions.fontSize !== 'undefined' && axisOptions.fontSize !== null)
-							this.axisOptions.fontSize = axisOptions.fontSize;
-					if (typeof axisOptions.fontFamily !== 'undefined' && axisOptions.fontFamily !== null)
-							this.axisOptions.fontFamily = axisOptions.fontFamily;
-					if (typeof axisOptions.title !== 'undefined' && axisOptions.title !== null)
-							this.axisOptions.title = axisOptions.title;
-					if (typeof axisOptions.showGridlines !== 'undefined' && axisOptions.showGridlines !== null)
-							this.axisOptions.showGridlines = axisOptions.showGridlines;
-					if (typeof axisOptions.innerPadding !== 'undefined' && axisOptions.innerPadding !== null)
-							this.axisOptions.innerPadding = axisOptions.innerPadding;
-					if (typeof axisOptions.outerPadding !== 'undefined' && axisOptions.outerPadding !== null)
-							this.axisOptions.outerPadding = axisOptions.outerPadding;
-					if (typeof axisOptions.clamp !== 'undefined' && axisOptions.clamp !== null)
-							this.axisOptions.clamp = axisOptions.clamp;
-					if (typeof axisOptions.axisColor !== 'undefined' && axisOptions.axisColor !== null)
-							this.axisOptions.axisColor = axisOptions.axisColor;
-					if (typeof axisOptions.labelRotate !== 'undefined' && axisOptions.labelRotate !== null)
-							this.axisOptions.labelRotate = axisOptions.labelRotate;
-					if (typeof axisOptions.pathVisible !== 'undefined' && axisOptions.pathVisible !== null)
-							this.axisOptions.pathVisible = axisOptions.pathVisible;
-					if (typeof axisOptions.tickColor !== 'undefined' && axisOptions.tickColor !== null)
-							this.axisOptions.tickColor = axisOptions.tickColor;
-				}
-        public draw(svg: d3.Selection<any>, axisData: [IAxisData], axisId?: string) {
+        public setOptions(axisOptions: IAxisOptions) {
+            if (typeof axisOptions.fontSize !== 'undefined' && axisOptions.fontSize !== null)
+                this.axisOptions.fontSize = axisOptions.fontSize;
+            if (typeof axisOptions.fontFamily !== 'undefined' && axisOptions.fontFamily !== null)
+                this.axisOptions.fontFamily = axisOptions.fontFamily;
+            if (typeof axisOptions.title !== 'undefined' && axisOptions.title !== null)
+                this.axisOptions.title = axisOptions.title;
+            if (typeof axisOptions.showGridlines !== 'undefined' && axisOptions.showGridlines !== null)
+                this.axisOptions.showGridlines = axisOptions.showGridlines;
+            if (typeof axisOptions.innerPadding !== 'undefined' && axisOptions.innerPadding !== null)
+                this.axisOptions.innerPadding = axisOptions.innerPadding;
+            if (typeof axisOptions.outerPadding !== 'undefined' && axisOptions.outerPadding !== null)
+                this.axisOptions.outerPadding = axisOptions.outerPadding;
+            if (typeof axisOptions.clamp !== 'undefined' && axisOptions.clamp !== null)
+                this.axisOptions.clamp = axisOptions.clamp;
+            if (typeof axisOptions.axisColor !== 'undefined' && axisOptions.axisColor !== null)
+                this.axisOptions.axisColor = axisOptions.axisColor;
+            if (typeof axisOptions.labelRotate !== 'undefined' && axisOptions.labelRotate !== null)
+                this.axisOptions.labelRotate = axisOptions.labelRotate;
+            if (typeof axisOptions.textAnchor !== 'undefined' && axisOptions.textAnchor !== null)
+                this.axisOptions.textAnchor = axisOptions.textAnchor;
+            if (typeof axisOptions.dx !== 'undefined' && axisOptions.dx !== null)
+                this.axisOptions.dx = axisOptions.dx;
+            if (typeof axisOptions.dy !== 'undefined' && axisOptions.dy !== null)
+                this.axisOptions.dy = axisOptions.dy;
+            if (typeof axisOptions.pathVisible !== 'undefined' && axisOptions.pathVisible !== null)
+                this.axisOptions.pathVisible = axisOptions.pathVisible;
+            if (typeof axisOptions.tickColor !== 'undefined' && axisOptions.tickColor !== null)
+                this.axisOptions.tickColor = axisOptions.tickColor;
+        }
+        public draw(svg: d3.Selection<any>, axisData: IAxisData[], axisId?: string) {
             switch (this.axisProperties.perspective) {
                 case (Perspective.horizontal):
                     this.axisId = axisId || <string>svg.attr('id') + '_xAxis';
@@ -80,9 +90,19 @@ module griffin.axis {
                         .call(xAxis)
                         .attr("transform", "translate(" + this.axisProperties.position.x + "," + this.axisProperties.position.y + ")");
 
-										if(this.axisOptions.labelRotate!=='auto'){
-											//rotate label
-										}
+                    var ticks = axis
+                        .selectAll('text')
+                        .text(function(d, i) {
+                            return axisData[i].label;
+                        });
+
+                    if (this.axisOptions.labelRotate !== 'auto') {
+                        ticks
+                            .style("text-anchor", this.axisOptions.textAnchor)
+                            .attr("dx", this.axisOptions.dx)
+                            .attr("dy", this.axisOptions.dy)
+                            .attr("transform", "rotate(-" + this.axisOptions.labelRotate + ")");
+                    }
                     break;
                 case (Perspective.vertical):
                     break;
