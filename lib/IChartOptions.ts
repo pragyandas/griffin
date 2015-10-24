@@ -61,6 +61,8 @@ module griffin {
         innerPadding?: number,
         outerPadding?: number,
         tickFormat?: any,
+        tickPrefix?:string,
+        tickPostfix?:string,
         clamp?: boolean,
         axisColor?: string,
         labelRotate?: string,//if auto then,
@@ -100,12 +102,11 @@ module griffin {
         transition: ITransition | boolean
     }
     export interface ISeries {
-        name: string,
+        name?: string,
         value: string,
         data: number[],
-        labels?: string[],
-        axisId: number,
-        trendline: boolean
+        axisId?: number,
+        trendline?: boolean
     }
     export interface ICategory {
         value: string,

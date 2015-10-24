@@ -40,7 +40,6 @@
   "lib/chart/barTable.ts",
   "lib/chart/baseChart.ts",
   "lib/chart/column.ts",
-  "lib/chart/donut.ts",
   "lib/chart/line.ts",
   "lib/chart/pie.ts",
   "lib/IChartOptions.ts",

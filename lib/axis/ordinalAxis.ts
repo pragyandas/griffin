@@ -5,8 +5,7 @@ module griffin.axis {
         label?:string
     }
     export class OrdinalAxis {
-        //create IAxisData but do not export
-        public axisData: IAxisData;
+        // public axisData: IAxisData;
         public scale: any;
         private axisProperties: IAxisProperties = {
             perspective: Perspective.horizontal,
@@ -80,17 +79,17 @@ module griffin.axis {
                         .domain(axisData.map((d) => { return d.value }))
                         .rangeRoundBands([0, width], this.axisOptions.innerPadding, this.axisOptions.outerPadding);
 
-                   	var xAxis = d3.svg.axis()
+                   	let xAxis = d3.svg.axis()
                    			  .scale(this.scale)
-                   			  .orient(this.axisProperties.orient.toString());
+                   			  .orient(Direction[this.axisProperties.orient]);
 
-                    var axis = svg.append('g')
+                    let axis = svg.append('g')
                         .attr('class', 'x axis')
                         .attr('id', this.axisId)
                         .call(xAxis)
                         .attr("transform", "translate(" + this.axisProperties.position.x + "," + this.axisProperties.position.y + ")");
 
-                    var ticks = axis
+                    let ticks = axis
                         .selectAll('text')
                         .text(function(d, i) {
                             return axisData[i].label;

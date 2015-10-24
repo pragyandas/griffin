@@ -181,7 +181,7 @@ module griffin.chart {
                 let seriesAxis = axis.AxisFactory.getAxis(this.columnOptions.valueAxesOptions[index].axisType, this.axisProperties.valueAxesProperties[index], this.theme);
                 seriesAxis.setOptions(this.columnOptions.valueAxesOptions[index]);
                 this.seriesAxes.push(seriesAxis);
-                seriesAxis.draw(this.svg, axisData);
+                seriesAxis.draw(this.svg, axisData.map((aData)=>{return {name:aData.name,value:aData.value,data:aData.data}}));
             }
         }
         private applyCategoryAxisLabelRotation() {
